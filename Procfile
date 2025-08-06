@@ -1,0 +1,1 @@
+web: gunicorn netalith0django.wsgi
