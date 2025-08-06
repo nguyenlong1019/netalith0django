@@ -1,0 +1,2 @@
+def default(request):
+    return {}
