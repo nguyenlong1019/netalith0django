@@ -1,5 +1,6 @@
 from django.utils.html import format_html 
 from django.contrib.humanize.templatetags.humanize import intcomma 
+import uuid 
 import re 
 from django.utils.timezone import localdate, localtime 
 import requests 
@@ -80,3 +81,7 @@ def get_ip_info(ip):
                 "data_json": data 
             }
     return None 
+
+
+def gen_hex():
+    return uuid.uuid4().hex

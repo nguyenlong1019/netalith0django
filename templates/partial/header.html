@@ -1,5 +1,5 @@
 {% load static %}
-<header>
+<header id="main-header">
     <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
         <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
             <a href="{% url 'index_view' %}" class="flex items-center">
@@ -7,8 +7,25 @@
                 <span class="self-center text-primary-700 text-xl font-semibold whitespace-nowrap dark:text-white">0django</span>
             </a>
             <div class="flex items-center lg:order-2">
+                {% if request.user.is_authenticated %}
+                <el-dropdown class="relative ml-3">
+                    <button class="relative flex rounded-full bg-gray-800 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800">
+                      <span class="absolute -inset-1.5"></span>
+                      <span class="sr-only">Open user menu</span>
+                      <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-8 rounded-full" />
+                    </button>
+          
+                    <el-menu anchor="bottom end" popover class="w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
+                        <span class="block px-4 py-2 text-sm text-black-700 font-semibold focus:bg-gray-100 focus:outline-hidden">{{request.user.fullname}}</span>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Dashboard</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">My Profile</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Sign out</a>
+                    </el-menu>
+                </el-dropdown>
+                {% else %}
                 <a href="{% url 'login_view' %}" class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Log in</a>
                 <a href="{% url 'register_view' %}" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">Register</a>
+                {% endif %}
                 <button data-collapse-toggle="mobile-menu-2" type="button" class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="mobile-menu-2" aria-expanded="false">
                     <span class="sr-only">Open main menu</span>
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
@@ -37,3 +54,19 @@
         </div>
     </nav>
 </header>
+<script>
+    const header = document.querySelector('#main-header nav');
+    const fixedClass = "fixed top-0 left-0 right-0 z-50";
+    const headerContainer = document.querySelector('#main-header');
+
+    window.addEventListener("scroll", function () {
+      const rect = headerContainer.getBoundingClientRect();
+      const isOutOfView = rect.bottom <= 0;
+
+      if (isOutOfView) {
+        header.classList.add(...fixedClass.split(" "));
+      } else {
+        header.classList.remove(...fixedClass.split(" "));
+      }
+    });
+</script>

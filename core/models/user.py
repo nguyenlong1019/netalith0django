@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager 
+from django.core.validators import FileExtensionValidator 
 from utils.models import TimeInfo 
 from django.utils import timezone 
 from datetime import timedelta 
+from tinymce.models  import HTMLField
 
 
 class UserManager(BaseUserManager):
@@ -28,22 +30,26 @@ class User(AbstractBaseUser, PermissionsMixin, TimeInfo):
         (1, 'Female'),
     )
 
-    fullname = models.CharField(max_length=255, verbose_name='Họ và tên')
+    fullname = models.CharField(max_length=255)
     email = models.EmailField(unique=True, max_length=255)
-    first_name = models.CharField(max_length=110, null=True, blank=True, verbose_name='Họ')
-    last_name = models.CharField(max_length=110, null=True, blank=True, verbose_name='Tên')
+    first_name = models.CharField(max_length=110, null=True, blank=True)
+    last_name = models.CharField(max_length=110, null=True, blank=True)
     is_verified = models.BooleanField(default=False) # verify by email
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
-    gender = models.SmallIntegerField(default=0, choices=GENDER_CHOICES, verbose_name='Giới tính')
-    phone = models.CharField(max_length=15, null=True, blank=True, verbose_name='Số điện thoại')
-    address = models.TextField(null=True, blank=True, verbose_name='Địa chỉ')
+    gender = models.SmallIntegerField(default=0, choices=GENDER_CHOICES)
+    phone = models.CharField(max_length=15, null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
     facebook = models.URLField(max_length=2000, null=True, blank=True)
-    zalo = models.URLField(max_length=2000, null=True, blank=True)
-    age = models.SmallIntegerField(default=18, verbose_name='Tuổi')
+    x = models.URLField(max_length=2000, null=True, blank=True)
+    tiktok = models.URLField(max_length=2000, null=True, blank=True)
+    instagram = models.URLField(max_length=2000, null=True, blank=True)
+    age = models.SmallIntegerField(default=18)
+    bio = HTMLField(null=True, blank=True)
+    profile_file = models.FileField(upload_to='profile/', null=True, blank=True, validators=[FileExtensionValidator(allowed_extensions=['html', 'htm'])])
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
