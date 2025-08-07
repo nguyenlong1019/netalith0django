@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     'core',
 ]
 
+SITE_ID = 1
+
 MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware', # gzip middleware 
     'django.middleware.security.SecurityMiddleware',
@@ -264,11 +266,12 @@ JAZZMIN_SETTINGS = {
         # "resource.ResourceDetail",
         "core", # custom core app 
         "core.User",
-        # "core.UserAddress",
-        # "core.Order",
-        # "core.Product",
-        # "core.Category",
-        # "core.Brand",
+        "core.Category",
+        "core.Blog", 
+        "core.BlogComment",
+        "core.Post",
+        "core.PostComment",
+        "core.PageCategory",
         "core.GroupPage",
         "core.StaticPage",
         "core.SiteInfo",
@@ -292,11 +295,12 @@ JAZZMIN_SETTINGS = {
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
         "core.User": "fas fa-user-circle",
-        # "core.UserAddress": "fas fa-address-book",
-        # "core.Order": "fas fa-truck",
-        # "core.Product": "fas fa-box",
-        # "core.Category": "fas fa-stream",
-        # "core.Brand": "fas fa-signature",
+        "core.Category": "fas fa-stream",
+        "core.Blog": "fab fa-envira", 
+        "core.BlogComment": "fas fa-comments",
+        "core.Post": "",
+        "core.PostComment": "",
+        "core.PageCategory": "fas fa-clipboard-list",
         "core.GroupPage": "fas fa-sitemap",
         "core.StaticPage": "fas fa-code",
         "core.SiteInfo": "fas fa-cog",
