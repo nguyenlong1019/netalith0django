@@ -222,7 +222,7 @@ JAZZMIN_SETTINGS = {
     "copyright": "HK2 Team, 2025",
 
     # If you want to use a single search field you dont need to use a list, you can use a simple string 
-    "search_model": ["core.Order"],
+    "search_model": ["core.Post", "core.Blog"],
 
     # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
     "user_avatar": None,

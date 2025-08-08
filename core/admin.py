@@ -268,6 +268,16 @@ class CategoryAdmin(BaseAdmin0Django):
         super().save_model(request, obj, form, change)
 
 
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        field = super().formfield_for_choice_field(db_field, request, **kwargs)
+        if db_field.name == "status":
+            is_add = request.resolver_match and request.resolver_match.url_name.endswith("_add")
+            if is_add:
+                field.choices = [(0, "Draft"), (1, "Publish")]
+                field.initial = 0
+        return field
+
+
 @admin.register(PageCategory)
 class PageCategoryAdmin(admin.ModelAdmin):
     search_fields = ['id', 'name',]
@@ -297,19 +307,67 @@ class StaticPageAdmin(admin.ModelAdmin):
 
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
-    pass 
+    search_fields = ['id', 'title']
+    list_display = ['id', 'title', 'updated_at_display']
+    list_filter = ['author', 'category', 'created_at', 'updated_at']
+    list_display_links = ['id']
+    readonly_fields = ['id', 'created_at', 'updated_at']
+
+    fieldsets = (
+        ('Edit Blog', {
+            'fields': (
+                'id', 'title', 'category', 'content', 'thumb', 'slug', 'total_comment'
+            )
+        }),
+        ("Dates", {"fields": ("created_at", "updated_at")}),
+        ("Owner", {"fields": ("author",)}),
+        ('SEO Info', {
+            'fields': (
+                'meta_title', 'meta_description', 'meta_keywords'
+            )
+        })
+    )
 
 
 @admin.register(BlogComment)
 class BlogCommentAdmin(admin.ModelAdmin):
-    pass 
+    search_fields = ['id', 'blog', 'user']
+    list_display = ['id', 'user', 'blog']
+    list_filter = ['user', 'blog', 'created_at', 'updated_at']
+    list_display_links = ['id']
+    readonly_fields = ['id', 'created_at', 'updated_at'] 
 
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    pass 
+    search_fields = ['id', 'author', 'pid']
+    list_display = ['id', 'author', 'pid', 'updated_at_display']
+    list_filter = ['author', 'category', 'created_at', 'updated_at']
+    list_display_links = ['id']
+    readonly_fields = ['id', 'created_at', 'updated_at'] 
+
+    fieldsets = (
+        ('Edit Post', {
+            'fields': (
+                'id', 
+                'category', 'feed', 'total_react', 'total_comment',
+            )
+        }),
+        ("Dates", {"fields": ("created_at", "updated_at")}),
+        ("Owner", {"fields": ("author",)}),
+        ('SEO Info', {
+            'fields': (
+                'meta_title', 'meta_description', 'meta_keywords'
+            )
+        })
+    )
 
 
 @admin.register(PostComment)
 class PostCommentAdmin(admin.ModelAdmin):
-    pass 
+    search_fields = ['id', 'post', 'user']
+    list_display = ['id', 'user', 'post']
+    list_filter = ['user', 'post', 'created_at', 'updated_at']
+    list_display_links = ['id']
+    readonly_fields = ['id', 'created_at', 'updated_at'] 
+    

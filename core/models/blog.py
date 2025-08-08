@@ -32,7 +32,7 @@ class Blog(TimeInfo, SEOBasicAbstract):
         super(Blog, self).save(*args, **kwargs)
 
 
-class BlogComment(TimeInfo, SEOBasicAbstract):
+class BlogComment(TimeInfo):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     blog = models.ForeignKey(Blog, null=True, on_delete=models.SET_NULL)
     content = HTMLField()

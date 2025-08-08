@@ -19,7 +19,7 @@ class TimeInfo(models.Model):
 
     @property
     def updated_at_display(self):
-        return localtime(self.created_at).strftime("%d-%m-%Y %H:%M:%S")
+        return localtime(self.updated_at).strftime("%d-%m-%Y %H:%M:%S")
     
 
     @property

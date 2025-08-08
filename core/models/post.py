@@ -6,7 +6,7 @@ from .category import Category
 from .user import User 
 
 
-class Post(TimeInfo, SEOBasicAbstract):
+class Post(TimeInfo):
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     feed = HTMLField()
@@ -23,7 +23,7 @@ class Post(TimeInfo, SEOBasicAbstract):
         return self.pid 
 
 
-class PostComment(TimeInfo, SEOBasicAbstract):
+class PostComment(TimeInfo):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     post = models.ForeignKey(Post, null=True, on_delete=models.SET_NULL)
     content = HTMLField()
