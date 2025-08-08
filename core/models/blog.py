@@ -7,6 +7,13 @@ from .category import Category
 from .user import User 
 
 
+PUBLISH_STATUS = (
+    (0, 'Draft'),
+    (1, 'Published'),
+    (2, 'Deleted')
+)
+
+
 class Blog(TimeInfo, SEOBasicAbstract):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
@@ -16,6 +23,7 @@ class Blog(TimeInfo, SEOBasicAbstract):
     pid = models.CharField(max_length=32, unique=True, default=gen_hex)
     slug = models.SlugField(max_length=300, null=True, blank=True)
     thumb = models.ImageField(upload_to='blog/', null=True, blank=True)
+    status = models.SmallIntegerField(default=0, choices=PUBLISH_STATUS)
 
     class Meta:
         verbose_name_plural = 'Blog'

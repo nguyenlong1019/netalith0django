@@ -6,6 +6,13 @@ from .category import Category
 from .user import User 
 
 
+PUBLISH_STATUS = (
+    (0, 'Draft'),
+    (1, 'Published'),
+    (2, 'Deleted')
+)
+
+
 class Post(TimeInfo):
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
@@ -13,6 +20,7 @@ class Post(TimeInfo):
     total_react = models.IntegerField(default=0)
     total_comment = models.IntegerField(default=0)
     pid = models.CharField(max_length=32, unique=True, default=gen_hex)
+    status = models.SmallIntegerField(default=0, choices=PUBLISH_STATUS)
 
     class Meta:
         verbose_name_plural = 'Post'

@@ -67,6 +67,22 @@ class BaseAdmin0Django(admin.ModelAdmin):
         return (not request.user.is_superuser) and request.user.groups.filter(name='User0Django').exists()
 
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "category":
+            kwargs["queryset"] = Category.objects.filter(status=1)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    
+
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        field = super().formfield_for_choice_field(db_field, request, **kwargs)
+        if db_field.name == "status":
+            is_add = request.resolver_match and request.resolver_match.url_name.endswith("_add")
+            if is_add:
+                field.choices = [(0, "Draft"), (1, "Publish")]
+                field.initial = 0
+        return field
+
+
 @admin.register(User)
 class UserAccountAdmin(UserAdmin, BaseAdmin0Django):
     add_form = CustomUserCreationForm
@@ -268,16 +284,6 @@ class CategoryAdmin(BaseAdmin0Django):
         super().save_model(request, obj, form, change)
 
 
-    def formfield_for_choice_field(self, db_field, request, **kwargs):
-        field = super().formfield_for_choice_field(db_field, request, **kwargs)
-        if db_field.name == "status":
-            is_add = request.resolver_match and request.resolver_match.url_name.endswith("_add")
-            if is_add:
-                field.choices = [(0, "Draft"), (1, "Publish")]
-                field.initial = 0
-        return field
-
-
 @admin.register(PageCategory)
 class PageCategoryAdmin(admin.ModelAdmin):
     search_fields = ['id', 'name',]
@@ -305,18 +311,24 @@ class StaticPageAdmin(admin.ModelAdmin):
     readonly_fields = ['id', 'created_at', 'updated_at'] 
 
 
+class BlogCommentStacked(admin.StackedInline):
+    model = BlogComment 
+    extra = 1
+
+
 @admin.register(Blog)
-class BlogAdmin(admin.ModelAdmin):
+class BlogAdmin(BaseAdmin0Django):
     search_fields = ['id', 'title']
     list_display = ['id', 'title', 'updated_at_display']
     list_filter = ['author', 'category', 'created_at', 'updated_at']
     list_display_links = ['id']
     readonly_fields = ['id', 'created_at', 'updated_at']
+    inlines = [BlogCommentStacked]
 
     fieldsets = (
         ('Edit Blog', {
             'fields': (
-                'id', 'title', 'category', 'content', 'thumb', 'slug', 'total_comment'
+                'id', 'title', 'category', 'status', 'content', 'thumb', 'slug', 'total_comment'
             )
         }),
         ("Dates", {"fields": ("created_at", "updated_at")}),
@@ -327,6 +339,12 @@ class BlogAdmin(admin.ModelAdmin):
             )
         })
     )
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if self._is_user0(request):
+            return qs.filter(author=request.user)
+        return qs
 
 
 @admin.register(BlogComment)
@@ -338,29 +356,36 @@ class BlogCommentAdmin(admin.ModelAdmin):
     readonly_fields = ['id', 'created_at', 'updated_at'] 
 
 
+class PostCommentStacked(admin.StackedInline):
+    model = PostComment 
+    extra = 1
+
+
 @admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(BaseAdmin0Django):
     search_fields = ['id', 'author', 'pid']
     list_display = ['id', 'author', 'pid', 'updated_at_display']
     list_filter = ['author', 'category', 'created_at', 'updated_at']
     list_display_links = ['id']
     readonly_fields = ['id', 'created_at', 'updated_at'] 
+    inlines = [PostCommentStacked]
 
     fieldsets = (
         ('Edit Post', {
             'fields': (
                 'id', 
-                'category', 'feed', 'total_react', 'total_comment',
+                'category', 'status', 'feed', 'total_react', 'total_comment',
             )
         }),
         ("Dates", {"fields": ("created_at", "updated_at")}),
         ("Owner", {"fields": ("author",)}),
-        ('SEO Info', {
-            'fields': (
-                'meta_title', 'meta_description', 'meta_keywords'
-            )
-        })
     )
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if self._is_user0(request):
+            return qs.filter(author=request.user)
+        return qs
 
 
 @admin.register(PostComment)
@@ -370,4 +395,4 @@ class PostCommentAdmin(admin.ModelAdmin):
     list_filter = ['user', 'post', 'created_at', 'updated_at']
     list_display_links = ['id']
     readonly_fields = ['id', 'created_at', 'updated_at'] 
-    
+
