@@ -1,7 +1,7 @@
 from django import forms 
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.validators import RegexValidator
-from core.models.user import User
+from core.models.user import User 
 
 
 class CustomUserCreationForm(forms.ModelForm):

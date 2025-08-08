@@ -60,10 +60,15 @@ class LogEntryAdmin(admin.ModelAdmin):
         self.model._meta.verbose_name = 'Action Log'
         self.model._meta.verbose_name_plural = 'Action Log'
         return super().get_model_perms(request)
+    
+
+class BaseAdmin0Django(admin.ModelAdmin):
+    def _is_user0(self, request):
+        return (not request.user.is_superuser) and request.user.groups.filter(name='User0Django').exists()
 
 
 @admin.register(User)
-class UserAccountAdmin(UserAdmin):
+class UserAccountAdmin(UserAdmin, BaseAdmin0Django):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = User 
@@ -75,7 +80,7 @@ class UserAccountAdmin(UserAdmin):
     
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        ("Personal info", {"fields": ("fullname", "gender", "phone", "address", "facebook", "zalo", "age")}),
+        ("Personal info", {"fields": ("fullname", "gender", "phone", "address", "facebook", "age")}),
         (_("Permissions"), {"fields": ("is_active", "is_staff",
                                        "is_superuser", "groups",
                                        "user_permissions")}),
@@ -93,6 +98,55 @@ class UserAccountAdmin(UserAdmin):
     
     search_fields = ('id', 'email',)
     ordering = ['-updated_at']
+    
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if self._is_user0(request):
+            return qs.filter(pk=request.user.pk)
+        return qs 
+    
+
+    def has_view_permission(self, request, obj = None):
+        if request.user.is_superuser:
+            return True
+        if not self._is_user0(request):
+            return super().has_view_permission(request, obj)
+        return obj is None or obj.pk == request.user.pk 
+    
+
+    def has_change_permission(self, request, obj = None):
+        if request.user.is_superuser:
+            return True 
+        if not self._is_user0(request):
+            return super().has_change_permission(request, obj)
+        return obj is None or obj.pk == request.user.pk 
+
+
+    def get_readonly_fields(self, request, obj = None):
+        ro = list(super().get_readonly_fields(request, obj))
+        if self._is_user0(request):
+            ro += ['is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions', 'email']        
+        return ro 
+    
+
+    def get_fieldsets(self, request, obj = None):
+        fs = super().get_fieldsets(request, obj)
+        if self._is_user0(request):
+            fs = tuple(section for section in fs if section[0] != _("Permissions"))
+        return fs 
+    
+
+    def get_list_filter(self, request):
+        if self._is_user0(request):
+            return ()  
+        return super().get_list_filter(request)
+
+
+    def get_search_fields(self, request):
+        if self._is_user0(request):
+            return ()  
+        return super().get_search_fields(request)
 
 
 @admin.register(EmailLog)
@@ -149,12 +203,69 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(BaseAdmin0Django):
     search_fields = ['id', 'name',]
     list_display = ['id', 'name', 'updated_at_display',]
     list_filter = ['created_at', 'updated_at']
     list_display_links = ['id']
     readonly_fields = ['id', 'created_at', 'updated_at'] 
+
+    PUBLISHABLE_STATUSES = (0, 1)
+
+
+    def get_fieldsets(self, request, obj = None):
+        if obj is None:
+            return (
+                (None, {'fields': ('name', 'status')}),
+            )
+        else:
+            if request.user.is_superuser:
+                return (
+                    (None, {"fields": ("name", "slug", "status")}),
+                    ("Dates", {"fields": ("created_at", "updated_at")}),
+                    ("Owner", {"fields": ("created_by",)}),
+                )
+            else:
+                return (
+                    (None, {"fields": ("name", "status")}),
+                    ("Dates", {"fields": ("created_at", "updated_at")}),
+                    ("Owner", {"fields": ("created_by",)}),
+                )
+
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if self._is_user0(request):
+            return qs.filter(status__in=self.PUBLISHABLE_STATUSES)
+        return qs
+
+
+    def has_change_permission(self, request, obj = None):
+        if request.user.is_superuser:
+            return True 
+        if self._is_user0(request):
+            if obj is None:
+                return True 
+            return obj.created_by_id == request.user.id 
+        return super().has_change_permission(request, obj)
+    
+
+    def get_readonly_fields(self, request, obj=None):
+        ro = list(super().get_readonly_fields(request, obj))
+        if self._is_user0(request):
+            ro += ['created_by']
+        return ro
+    
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            if not request.user.is_superuser:
+                obj.created_by = request.user
+        else:
+            if not request.user.is_superuser:
+                original = type(obj).objects.only('created_by').get(pk=obj.pk)
+                obj.created_by_id = original.created_by_id
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(PageCategory)

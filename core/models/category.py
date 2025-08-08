@@ -1,11 +1,19 @@
 from django.db import models 
 from django.utils.text import slugify 
 from utils.models import TimeInfo 
+from core.models.user import User 
 
 
 class Category(TimeInfo):
-    name = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(max_length=300, null=True, blank=True)
+    CATEGORY_STATUS = (
+        (0, 'Draft'),
+        (1, 'Publish'),
+        (2, 'Deleted')
+    )
+    name = models.CharField(max_length=25, unique=True)
+    slug = models.SlugField(max_length=255, null=True, blank=True)
+    status = models.SmallIntegerField(default=0, choices=CATEGORY_STATUS)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
 
     class Meta:

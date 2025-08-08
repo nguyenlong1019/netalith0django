@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate 
 from django.contrib.auth.decorators import login_required 
 from core.models.user import User 
+from django.contrib.auth.models import Group 
 
 
 def login_view(request):
@@ -43,8 +44,13 @@ def register_view(request):
             return render(request, 'core/register.html', status=200) 
         user = User.objects.create_user(
             email=email,
-            password=password
+            password=password,
+            is_staff=True
         )
+        
+        user_group, created = Group.objects.get_or_create(name='User0Django')
+        user.groups.add(user_group)
+
         login(request, user)
         return redirect('index_view')
     return render(request, 'core/register.html', status=200)
