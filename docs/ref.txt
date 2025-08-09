@@ -7,7 +7,7 @@ Use in:
 https://flowbite.com/blocks/
 
 feat: 
-auth, profile (done), blog, post, AI assistant, JS game
+auth (done) - bổ sung 1 task schedule 1 ngày quét và xóa các acc k verify - trừ acc superadmin, profile (done), blog, post, AI assistant, JS game
 
 tool -> source code -> paste -> save
 

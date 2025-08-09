@@ -38,6 +38,11 @@ def login_view(request):
         if not user:
             messages.error(request, "Email or password incorrect!")
             return redirect('login_view')
+
+        if not user.is_verified:
+            messages.info(request, "Please check email end click verify button to take the next step!")
+            return redirect('login_view') 
+
         login(request, user)
 
         access = encode_access(user, extra = {'role': 'user'})
@@ -102,7 +107,7 @@ def register_view(request):
             text=True
         ).stdin.write(json.dumps(data))
         msg = 'Register successfully, please close this window and check your email to verify account!'
-        return HttpResponse(msg)
+        return HttpResponse(f'<h1>{msg}</h1>')
         # login(request, user)
         # return redirect('index_view')
     return render(request, 'core/register.html', status=200)
