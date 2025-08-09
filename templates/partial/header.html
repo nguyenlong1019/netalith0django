@@ -18,7 +18,7 @@
                     <el-menu anchor="bottom end" popover class="w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
                         <span class="block px-4 py-2 text-sm text-black-700 font-semibold focus:bg-gray-100 focus:outline-hidden">{{request.user.fullname}}</span>
                         <a href="{% if dashboard_route %}{{dashboard_route}}{% else %}#{% endif %}" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Dashboard</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">My Profile</a>
+                        <a href="{% url 'my_profile_view' %}" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">My Profile</a>
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Sign out</a>
                     </el-menu>
                 </el-dropdown>
@@ -55,18 +55,49 @@
     </nav>
 </header>
 <script>
-    const header = document.querySelector('#main-header nav');
-    const fixedClass = "fixed top-0 left-0 right-0 z-50";
-    const headerContainer = document.querySelector('#main-header');
+(() => {
+  const nav = document.querySelector('#main-header nav');
+  if (!nav) return;
 
-    window.addEventListener("scroll", function () {
-      const rect = headerContainer.getBoundingClientRect();
-      const isOutOfView = rect.bottom <= 0;
+  const fixedClasses = ['fixed','top-0','left-0','right-0','z-50'];
 
-      if (isOutOfView) {
-        header.classList.add(...fixedClass.split(" "));
-      } else {
-        header.classList.remove(...fixedClass.split(" "));
-      }
-    });
+  const spacer = document.createElement('div');
+  spacer.setAttribute('aria-hidden', 'true');
+  nav.after(spacer);
+
+  let navTop = nav.getBoundingClientRect().top + window.scrollY; 
+  let navHeight = nav.offsetHeight;
+
+  const applyFixed = () => {
+    spacer.style.height = navHeight + 'px';
+    nav.classList.add(...fixedClasses);
+  };
+
+  const removeFixed = () => {
+    nav.classList.remove(...fixedClasses);
+    spacer.style.height = '';
+  };
+
+  const recompute = () => {
+    const wasFixed = nav.classList.contains('fixed');
+    if (wasFixed) removeFixed();
+
+    navHeight = nav.offsetHeight;
+    navTop = nav.getBoundingClientRect().top + window.scrollY;
+
+    if (wasFixed) applyFixed();
+  };
+
+  const onScroll = () => {
+    if (window.scrollY >= navTop) {
+      if (!nav.classList.contains('fixed')) applyFixed();
+    } else {
+      if (nav.classList.contains('fixed')) removeFixed();
+    }
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', recompute);
+  window.addEventListener('load', recompute);
+})();
 </script>
