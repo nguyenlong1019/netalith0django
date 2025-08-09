@@ -36,5 +36,4 @@ function refreshToken() {
     console.error(error);
     return false;
   });
-  
 }

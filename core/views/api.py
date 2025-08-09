@@ -6,28 +6,37 @@ from core.service import ChatGPTService
 import json 
 
 
-@login_required(login_url='login')
-@require_POST
+# @login_required(login_url='login')
+# @require_POST
 @oauth_required
 def ai_ask_api(request):
-    data = json.loads(request.body)
-    user_msg = data.get('user_msg')
-    if not user_msg:
+    if not request.user.is_authenticated:
         return JsonResponse({
             'msg': '',
-            'error': 'Please enter prompt!',
+            'error': 'Login required!',
             'status': 400,
-            'code': 1,
+            'code': 2,
             'reply': {}
-        }, status=400)
-    c = ChatGPTService({'user_id': request.user.id})
-    params = {'user_content': user_msg}
-    is_success, result = c.run(params)
-    if is_success:
-        return JsonResponse({
-            'msg': 'ok',
-            'error': '',
-            'status': 200,
-            'code': 0,
-            'reply': result
-        }, status=200)
+        })
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        user_msg = data.get('user_msg')
+        if not user_msg:
+            return JsonResponse({
+                'msg': '',
+                'error': 'Please enter prompt!',
+                'status': 400,
+                'code': 1,
+                'reply': {}
+            }, status=400)
+        c = ChatGPTService(user_id=request.user.id)
+        params = {'user_content': user_msg}
+        is_success, result = c.run(params)
+        if is_success:
+            return JsonResponse({
+                'msg': 'ok',
+                'error': '',
+                'status': 200,
+                'code': 0,
+                'reply': result
+            }, status=200)

@@ -205,21 +205,23 @@
         console.log("1");
         if (status === 401) {
             console.log("2");
-            let refresh = refreshToken();
-            if (refresh) {
-                fetch('/api/v1/ai/ask', options)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.code === 0) {
-                        reply = data.reply;
-                    } else {
-                        reply = data.error
-                    }
-                })
-                .catch(err => console.error(err));
-            } else {
-                window.location.href = '/logout';
-            }
+            refreshToken()
+            .then(refresh => {
+              if (refresh) {
+                  fetch('/api/v1/ai/ask', options)
+                  .then(res => res.json())
+                  .then(data => {
+                      if (data.code === 0) {
+                          reply = data.reply;
+                      } else {
+                          reply = data.error
+                      }
+                  })
+                  .catch(err => console.error(err));
+              } else {
+                  window.location.href = '/logout';
+              }
+            })
         } else {
             console.log("3");
             if (body.code === 0) {

@@ -21,7 +21,7 @@ from utils.utils import is_valid_email
 ACCESS_COOKIE = "access_token"
 REFRESH_COOKIE = "refresh_token"
 
-MAX_AGE_ACCESS = 2*60 if settings.DB_MODE == 'development' else 2*3600
+MAX_AGE_ACCESS = 5*60 if settings.DB_MODE == 'development' else 2*3600
 MAX_AGE_REFRESH = 2*3600 if settings.DB_MODE == 'development' else 60*24*3600
  
 
@@ -47,6 +47,9 @@ def login_view(request):
 
         access = encode_access(user, extra = {'role': 'user'})
         refresh = encode_refresh(user)
+
+        print(access)
+        print(refresh)
 
         resp = redirect(request.GET.get('next') or 'index_view')
         resp.set_cookie(ACCESS_COOKIE, access, **cookie_kwargs(request, max_age=MAX_AGE_ACCESS))

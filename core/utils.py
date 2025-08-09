@@ -1,11 +1,12 @@
 import jwt, uuid, datetime 
 from django.conf import settings 
 from core.models.user import User 
+from django.utils import timezone
 from itsdangerous import URLSafeTimedSerializer
 
 
 def _now_utc():
-    return datetime.datetime.utcnow()
+    return timezone.now()
 
 
 def _exp(ttl):

@@ -14,7 +14,9 @@ def oauth_required(view_func, *, api = True):
     """
     @wraps(view_func)
     def _wrapped(request, *args, **kwargs):
+        print(f"cookies:{request.COOKIES}")
         raw = request.COOKIES.get(ACCESS_TOKEN)
+        print(f"raw:{raw}")
         if not raw:
             return JsonResponse({
                 'msg': '',
