@@ -40,3 +40,10 @@ def ai_ask_api(request):
                 'code': 0,
                 'reply': result
             }, status=200)
+        return JsonResponse({
+            'msg': 'ok',
+            'error': result,
+            'status': 200,
+            'code': 0,
+            'reply': result
+        }, status=200)

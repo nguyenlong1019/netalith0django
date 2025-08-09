@@ -10,6 +10,7 @@ API_KEY = settings.OPEN_API_API_SECRET_KEY
 class ChatGPTService:
     def __init__(self, **kwargs):
         self.user_id = kwargs.get('user_id')
+        self.user = None 
         self.messages = []
         self.headers = {
             'Content-Type': 'application/json',
@@ -22,6 +23,7 @@ class ChatGPTService:
         user = get_user(self.user_id)
         if not user:
             return False, 'user invalid'
+        self.user = user
         messages = AssistantLog.objects.filter(user=user).order_by('-created_at')
         if messages:
             for m in messages:
@@ -34,7 +36,7 @@ class ChatGPTService:
     def call_openai(self, user_content):
         data = {
             "model": "gpt-5-nano",
-            "temperature": 0.8,
+            # "temperature": 0.8, gpt-5.0 not support temperature 0.8
             "messages": self.messages + [{"role": "user", "content": user_content}]
         }
         response = requests.post(self.url, headers=self.headers, json=data)
@@ -43,7 +45,7 @@ class ChatGPTService:
 
     def save_log(self, user_msg, assistant_msg, data):
         AssistantLog.objects.create(
-            user=get_user,
+            user=self.user,
             user_msg=user_msg,
             assistant_msg=assistant_msg,
             cid=data.get('id'),

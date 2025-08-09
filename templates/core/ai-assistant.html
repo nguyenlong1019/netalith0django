@@ -193,7 +193,7 @@
         }),
         credentials: 'include'
       };
-      fetch('/api/v1/ai/ask', options)
+      await fetch('/api/v1/ai/ask', options)
       .then(res => {
         let statusCode = res.status;
         return res.json().then(data => ({
@@ -201,29 +201,20 @@
             body: data
         }));
       })
-      .then(({status, body}) => {
-        console.log("1");
+      .then(async ({status, body}) => {
         if (status === 401) {
-            console.log("2");
-            refreshToken()
-            .then(refresh => {
-              if (refresh) {
-                  fetch('/api/v1/ai/ask', options)
-                  .then(res => res.json())
-                  .then(data => {
-                      if (data.code === 0) {
-                          reply = data.reply;
-                      } else {
-                          reply = data.error
-                      }
-                  })
-                  .catch(err => console.error(err));
-              } else {
-                  window.location.href = '/logout';
-              }
+            await refreshToken();
+            await fetch('/api/v1/ai/ask', options)
+            .then(res => res.json())
+            .then(data => {
+                if (data.code === 0) {
+                    reply = data.reply;
+                } else {
+                    reply = data.error
+                }
             })
+            .catch(err => console.error(err));
         } else {
-            console.log("3");
             if (body.code === 0) {
                 reply = body.reply;
             } else {

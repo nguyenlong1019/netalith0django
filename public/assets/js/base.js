@@ -17,9 +17,9 @@ tailwind.config = {
   }
 }
 
-function refreshToken() { 
+async function refreshToken() { 
   const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-  fetch('/api/v1/auth/refresh', {
+  await fetch('/api/v1/auth/refresh', {
     method: 'POST', 
     headers: {
       'Content-Type': 'application/json',
@@ -27,13 +27,10 @@ function refreshToken() {
     }
   })
   .then(res => {
-    if (res.status === 200)
-      return true;
-    else
-      return false;
+    if (!res.ok) 
+      window.location.href = '/logout';
   })
   .catch(error => {
     console.error(error);
-    return false;
   });
 }
