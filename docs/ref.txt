@@ -5,3 +5,6 @@ https://daisyui.com/components/
 
 Use in:
 https://flowbite.com/blocks/
+
+feat: 
+auth, profile, blog, post, AI assistant, JS game

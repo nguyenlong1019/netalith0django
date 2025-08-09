@@ -70,6 +70,8 @@ class BaseAdmin0Django(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "category":
             kwargs["queryset"] = Category.objects.filter(status=1)
+        # if db_field.name == 'author' and not request.user.is_superuser:
+        #     kwargs['queryset'] = User.objects.filter(email=request.user.email)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
     
 
@@ -81,6 +83,25 @@ class BaseAdmin0Django(admin.ModelAdmin):
                 field.choices = [(0, "Draft"), (1, "Publish")]
                 field.initial = 0
         return field
+    
+
+class BaseAdminContent(admin.ModelAdmin):
+    def get_readonly_fields(self, request, obj=None):
+        ro = list(super().get_readonly_fields(request, obj))
+        if self._is_user0(request):
+            ro += ['author']
+        return ro
+    
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            if not request.user.is_superuser:
+                obj.author = request.user
+        else:
+            if not request.user.is_superuser:
+                original = type(obj).objects.only('author').get(pk=obj.pk)
+                obj.author_id = original.author_id
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(User)
@@ -317,7 +338,7 @@ class BlogCommentStacked(admin.StackedInline):
 
 
 @admin.register(Blog)
-class BlogAdmin(BaseAdmin0Django):
+class BlogAdmin(BaseAdmin0Django, BaseAdminContent):
     search_fields = ['id', 'title']
     list_display = ['id', 'title', 'updated_at_display']
     list_filter = ['author', 'category', 'created_at', 'updated_at']
@@ -345,6 +366,9 @@ class BlogAdmin(BaseAdmin0Django):
         if self._is_user0(request):
             return qs.filter(author=request.user)
         return qs
+    
+
+    
 
 
 @admin.register(BlogComment)
@@ -362,7 +386,7 @@ class PostCommentStacked(admin.StackedInline):
 
 
 @admin.register(Post)
-class PostAdmin(BaseAdmin0Django):
+class PostAdmin(BaseAdmin0Django, BaseAdminContent):
     search_fields = ['id', 'author', 'pid']
     list_display = ['id', 'author', 'pid', 'updated_at_display']
     list_filter = ['author', 'category', 'created_at', 'updated_at']
