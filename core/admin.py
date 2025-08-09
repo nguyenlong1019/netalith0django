@@ -117,10 +117,12 @@ class UserAccountAdmin(UserAdmin, BaseAdmin0Django):
     
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        ("Personal info", {"fields": ("fullname", "gender", "phone", "address", "facebook", "age")}),
+        ("Personal info", {"fields": ("avatar", "nickname", "first_name", "last_name", "fullname", "title", "gender", "age", "phone", "address", "bio")}),
         (_("Permissions"), {"fields": ("is_active", "is_staff",
                                        "is_superuser", "groups",
                                        "user_permissions")}),
+        ("Social", {"fields": ("linkedin", "youtube", "facebook", "instagram", "x", "website")}),
+        ("Custom Profile", {"fields": ("custom_profile",)}),
         ("Dates", {"fields": ("created_at", "updated_at")}),
     )
     
@@ -367,9 +369,6 @@ class BlogAdmin(BaseAdmin0Django, BaseAdminContent):
             return qs.filter(author=request.user)
         return qs
     
-
-    
-
 
 @admin.register(BlogComment)
 class BlogCommentAdmin(admin.ModelAdmin):

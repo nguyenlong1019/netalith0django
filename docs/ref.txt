@@ -8,3 +8,5 @@ https://flowbite.com/blocks/
 
 feat: 
 auth, profile, blog, post, AI assistant, JS game
+
+tool -> source code -> paste -> save

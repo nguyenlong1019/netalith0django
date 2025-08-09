@@ -4,6 +4,8 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required 
 from core.models.user import User 
 from django.contrib.auth.models import Group 
+from django.http import FileResponse, Http404 
+import mimetypes 
 
 
 def login_view(request):
@@ -61,3 +63,18 @@ def logout_view(request):
     logout(request)
     return redirect('index_view')
 
+
+@login_required(login_url='login')
+def my_profile_view(request):
+    # f = request.user.profile_file 
+    # if f and f.name.lower().endswith(('.html', '.htm')):
+    #     try:
+    #         fileobj = f.open('rb')
+    #     except Exception:
+    #         raise Http404("Profile file not found")
+    #     content_type, _ = mimetypes.guess_type(f.name)
+    #     if not content_type:
+    #         content_type = 'text/html'
+    #     resp = FileResponse(fileobj, content_type=content_type)
+    #     return render(request, request.user.profile_file, status=200)
+    return render(request, 'core/my-profile.html', status=200)

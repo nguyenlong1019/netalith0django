@@ -30,6 +30,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeInfo):
         (1, 'Female'),
     )
 
+    nickname = models.CharField(max_length=32, unique=True, null=True, blank=True)
     fullname = models.CharField(max_length=255)
     email = models.EmailField(unique=True, max_length=255)
     first_name = models.CharField(max_length=110, null=True, blank=True)
@@ -40,16 +41,21 @@ class User(AbstractBaseUser, PermissionsMixin, TimeInfo):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
+    title = models.CharField(max_length=55, null=True, blank=True,help_text="Ex: Software Engineer")
     gender = models.SmallIntegerField(default=0, choices=GENDER_CHOICES)
     phone = models.CharField(max_length=15, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     facebook = models.URLField(max_length=2000, null=True, blank=True)
-    x = models.URLField(max_length=2000, null=True, blank=True)
-    tiktok = models.URLField(max_length=2000, null=True, blank=True)
+    x = models.URLField(max_length=2000, null=True, blank=True, help_text='Twitter link')
+    # tiktok = models.URLField(max_length=2000, null=True, blank=True)
     instagram = models.URLField(max_length=2000, null=True, blank=True)
+    youtube = models.URLField(max_length=2000, null=True, blank=True)
+    linkedin = models.URLField(max_length=2000, null=True, blank=True, verbose_name='LinkedIn')
+    website = models.URLField(max_length=2000, null=True, blank=True)
     age = models.SmallIntegerField(default=18)
     bio = HTMLField(null=True, blank=True)
-    profile_file = models.FileField(upload_to='profile/', null=True, blank=True, validators=[FileExtensionValidator(allowed_extensions=['html', 'htm'])])
+    custom_profile = HTMLField(null=True, blank=True)
+    avatar = models.FileField(upload_to='profile/', null=True, blank=True, validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp', 'avif'])])
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -58,10 +64,12 @@ class User(AbstractBaseUser, PermissionsMixin, TimeInfo):
 
 
     def __str__(self):
-        return self.email 
+        return self.email if not self.nickname else self.nickname
     
 
     def save(self, *args, **kwargs):
+        if self.first_name and self.last_name:
+            self.fullname = self.first_name + " " + self.last_name
         if not self.fullname:
             if self.first_name and self.last_name:
                 self.fullname = self.first_name + " " + self.last_name
@@ -75,3 +83,20 @@ class User(AbstractBaseUser, PermissionsMixin, TimeInfo):
         verbose_name_plural = 'User'
         db_table = 'users'
 
+
+    @property
+    def website_name(self):
+        if self.website:
+            if self.website.startswith('http://'):
+                return self.website[6:].strip('/')
+            if self.website.startswith('https://'):
+                return self.website[7:].strip('/')
+            return self.website.strip('/')
+        return ''
+
+
+    @property
+    def avatar_url(self):
+        if self.avatar:
+            return self.avatar.url 
+        return ""
