@@ -16,3 +16,25 @@ tailwind.config = {
     }
   }
 }
+
+function refreshToken() { 
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  fetch('/api/v1/auth/refresh', {
+    method: 'POST', 
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrftoken,
+    }
+  })
+  .then(res => {
+    if (res.status === 200)
+      return true;
+    else
+      return false;
+  })
+  .catch(error => {
+    console.error(error);
+    return false;
+  });
+  
+}

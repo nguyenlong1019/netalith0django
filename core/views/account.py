@@ -141,6 +141,7 @@ def my_profile_view(request):
 from django.views.decorators.http import require_POST 
 @require_POST
 def refresh_token_view(request):
+    print("Refresh token...")
     raw = request.COOKIES.get(REFRESH_COOKIE)
     if not raw:
         return JsonResponse({

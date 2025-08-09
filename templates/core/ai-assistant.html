@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% include 'partial/header.html' %}
+{% csrf_token %}
+
+<!-- Page container -->
+<main class="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- Left rail (cards giống layout hiện có) -->
+    <aside class="lg:col-span-3 space-y-4">
+      <!-- Assistant intro -->
+      <section class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+        <div class="flex items-start gap-3">
+          <div class="h-10 w-10 grid place-items-center rounded-xl bg-blue-600 text-white font-semibold">AI</div>
+          <div>
+            <h2 class="font-semibold leading-tight">AI Assistant</h2>
+            <p class="text-sm text-slate-600">Ask about code, games, or posts.</p>
+          </div>
+        </div>
+        <p class="mt-3 text-sm text-slate-700"><span class="font-medium">Slogan:</span> <em>“Think faster. Build smarter.”</em></p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">#javascript</span>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">#ai</span>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">#tailwindcss</span>
+        </div>
+      </section>
+
+      <!-- Quick prompts -->
+      <section class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+        <h3 class="font-semibold mb-2">Quick prompts</h3>
+        <div class="flex flex-wrap gap-2">
+          <button data-prompt="Explain how to embed an HTML5 game."
+                  class="prompt px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-sm hover:bg-slate-200">
+            HTML5 embed
+          </button>
+          <button data-prompt="Generate a Tailwind card component."
+                  class="prompt px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-sm hover:bg-slate-200">
+            Tailwind card
+          </button>
+          <button data-prompt="Write a Django view with JWT cookie auth."
+                  class="prompt px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-sm hover:bg-slate-200">
+            Django JWT
+          </button>
+        </div>
+      </section>
+    </aside>
+
+    <!-- Chat area (card trung tâm) -->
+    <section class="lg:col-span-9">
+      <div class="bg-white border border-slate-200 rounded-2xl shadow-sm">
+        <!-- Chat header -->
+        <div class="px-4 sm:px-6 py-3 border-b border-slate-200 flex items-center gap-3">
+          <div class="h-8 w-8 grid place-items-center rounded-lg bg-blue-600 text-white text-xs font-bold">AI</div>
+          <div class="leading-tight">
+            <div class="font-semibold">Odjango Assistant</div>
+            <div class="text-xs text-slate-500">Ask. Build. Launch.</div>
+          </div>
+          <div class="ml-auto text-xs text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Online</div>
+        </div>
+
+        <!-- Messages -->
+        <div id="messages" class="h-[64vh] overflow-auto px-4 sm:px-6 py-4 space-y-4">
+          <!-- sample pair -->
+          <div class="flex items-start gap-3">
+            <div class="h-8 w-8 grid place-items-center rounded-full bg-slate-200">👤</div>
+            <div class="max-w-[80%] bg-slate-100 border border-slate-200 rounded-2xl rounded-tl-sm p-3 text-sm">
+              Hi! Can you help me scaffold a Tailwind card?
+              <div class="mt-1 text-[10px] text-slate-500">You • just now</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="h-8 w-8 grid place-items-center rounded-full bg-blue-600 text-white">🤖</div>
+            <div class="max-w-[80%] bg-white border border-slate-200 rounded-2xl rounded-tr-sm p-3 text-sm shadow-sm">
+              Sure — use a white container, subtle border, rounded‑2xl, and a soft shadow. Want a code snippet?
+              <div class="mt-1 text-[10px] text-slate-500">Assistant • just now</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Composer -->
+        <div class="border-t border-slate-200 p-3 sm:p-4">
+          <form id="composer" class="flex items-end gap-2">
+            <input type="text" id="input" rows="1"
+                      placeholder="Ask something..."
+                      class="flex-1 resize-none rounded-xl bg-white border border-slate-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></input>
+            <button id="send" type="submit"
+                    class="shrink-0 inline-flex items-center gap-2 rounded-xl bg-blue-600 text-white px-4 py-2 text-sm font-semibold hover:bg-blue-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M3 4.27v15.46c0 .7.75 1.15 1.36.82l15.12-7.73c.68-.35.68-1.3 0-1.65L4.36 3.45C3.75 3.12 3 3.57 3 4.27zm2.06 2.96 9.79 4.77-9.79 5.01V7.23z"/></svg>
+              Send
+            </button>
+          </form>
+          <p class="mt-2 text-[11px] text-slate-500">Press <kbd class="px-1.5 py-0.5 rounded border">Enter</kbd> to send • <kbd class="px-1.5 py-0.5 rounded border">Shift</kbd> + <kbd class="px-1.5 py-0.5 rounded border">Enter</kbd> for newline</p>
+        </div>
+      </div>
+    </section>
+</main>
+
+<script>
+    // Utilities
+    const $ = (s, ctx=document) => ctx.querySelector(s);
+    const $$ = (s, ctx=document) => Array.from(ctx.querySelectorAll(s));
+    const messages = $('#messages');
+    const input = $('#input');
+    const form = $('#composer');
+
+    function timeLabel(d=new Date()) {
+      return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    }
+    function scrollToBottom() {
+      messages.scrollTop = messages.scrollHeight;
+    }
+    function escapeHtml(str) {
+      return str.replace(/[&<>\"]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[s]));
+    }
+
+    function bubble(text, who='user') {
+      const wrap = document.createElement('div');
+      wrap.className = 'flex items-start gap-3';
+
+      const avatar = document.createElement('div');
+      avatar.className = 'h-8 w-8 grid place-items-center rounded-full ' + (who==='ai' ? 'bg-blue-600 text-white' : 'bg-slate-200');
+      avatar.textContent = who === 'ai' ? '🤖' : '👤';
+
+      const box = document.createElement('div');
+      box.className = 'max-w-[80%] p-3 text-sm rounded-2xl ' +
+        (who==='ai'
+          ? 'bg-white border border-slate-200 rounded-tr-sm shadow-sm'
+          : 'bg-slate-100 border border-slate-200 rounded-tl-sm');
+
+      box.innerHTML = `${text}<div class="mt-1 text-[10px] text-slate-500">${who==='ai'?'Assistant':'You'} • ${timeLabel()}</div>`;
+
+      wrap.appendChild(avatar);
+      wrap.appendChild(box);
+      messages.appendChild(wrap);
+      scrollToBottom();
+    }
+
+    function typing() {
+      const wrap = document.createElement('div');
+      wrap.className = 'flex items-start gap-3';
+      wrap.innerHTML = `
+        <div class="h-8 w-8 grid place-items-center rounded-full bg-blue-600 text-white">🤖</div>
+        <div class="max-w-[80%] p-3 text-sm rounded-2xl bg-white border border-slate-200 rounded-tr-sm shadow-sm">
+          <span class="inline-flex items-center gap-1">
+            <span class="animate-pulse">●</span>
+            <span class="animate-pulse [animation-delay:.15s]">●</span>
+            <span class="animate-pulse [animation-delay:.3s]">●</span>
+          </span>
+        </div>`;
+      messages.appendChild(wrap);
+      scrollToBottom();
+      return wrap;
+    }
+
+    // Auto-resize textarea
+    input.addEventListener('input', () => {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 180) + 'px';
+    });
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        form.requestSubmit();
+      }
+    });
+
+    // Submit & mock reply
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      input.style.height = 'auto';
+
+      bubble(escapeHtml(text), 'user');
+
+      const t = typing();
+      await new Promise(r => setTimeout(r, 600));
+      t.remove();
+      let reply;
+      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify({
+            'user_msg': text
+        }),
+        credentials: 'include'
+      };
+      fetch('/api/v1/ai/ask', options)
+      .then(res => {
+        let statusCode = res.status;
+        return res.json().then(data => ({
+            status: statusCode,
+            body: data
+        }));
+      })
+      .then(({status, body}) => {
+        console.log("1");
+        if (status === 401) {
+            console.log("2");
+            let refresh = refreshToken();
+            if (refresh) {
+                fetch('/api/v1/ai/ask', options)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code === 0) {
+                        reply = data.reply;
+                    } else {
+                        reply = data.error
+                    }
+                })
+                .catch(err => console.error(err));
+            } else {
+                window.location.href = '/logout';
+            }
+        } else {
+            console.log("3");
+            if (body.code === 0) {
+                reply = body.reply;
+            } else {
+                reply = body.error
+            }
+        }
+      })
+      .catch(err => console.error(err));
+
+      reply_test = `Here is a demo response to: <code>${escapeHtml(text)}</code>.<br><br>
+      This is a front-end mock. Wire this to your API endpoint (e.g. <code>/api/ai/chat</code>) and stream tokens if available.`;
+      bubble(reply, 'ai');
+    });
+
+    // Quick prompts
+    $$('.prompt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        input.value = btn.dataset.prompt;
+        input.dispatchEvent(new Event('input'));
+        input.focus();
+      });
+    });
+</script>
+
+{% include 'partial/footer.html' %}
+
+{% endblock %}
