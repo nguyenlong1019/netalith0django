@@ -364,3 +364,12 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER 
 ADMIN_ROUTE = config('ADMIN_ROUTE')
 TEST_IP = config('TEST_IP')
+
+
+from datetime import timedelta 
+
+
+JWT_SECRET = config('JWT_SECRET')
+JWT_ALG = "HS256"
+JWT_ACCESS_TTL = timedelta(hours=2)
+JWT_REFRESH_TTL = timedelta(days=60)

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verify Account - 0Django</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap">
+  </noscript>
+  
+  <style>
+    body {
+      font-family: "Open Sans", serif;
+      background-color: #f4f8fc;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .email-container {
+      max-width: 650px;
+      margin: auto;
+      background: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .header {
+      background-color: #2563eb;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .header h1 {
+      color: white;
+      font-size: 24px;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    .body {
+      padding: 32px;
+    }
+
+    .body h2 {
+      color: #2563eb;
+      margin-top: 0;
+      font-size: 22px;
+    }
+
+    .body p {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .order-info {
+      background: #f1f5fb;
+      border-left: 4px solid #2563eb;
+      padding: 16px;
+      margin: 20px 0;
+      border-radius: 6px;
+    }
+
+    .order-info table {
+      width: 100%;
+    }
+
+    .order-info th, .order-info td {
+      text-align: left;
+      padding: 8px 0;
+      font-size: 15px;
+    }
+
+    .cta {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .cta a {
+      background-color: #2563eb;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .footer {
+      background: #f9fafb;
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+      color: #888;
+    }
+
+    @media (max-width: 620px) {
+      .body {
+        padding: 20px;
+      }
+
+      .cta a {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <h1>0Django</h1>
+    </div>
+    <div class="body">
+      <h2>Verify Account</h2>
+      <p>Hello {{ email }},</p>
+      <p>Thank you for registering with <strong>0Django</strong>. To complete your account setup, please verify your email address by clicking the button below.</p>
+      <div class="cta">
+        <a href="{{ verify_url }}">Verify</a>
+      </div>
+      <p>If you did not create an account, please ignore this email or contact our support team if you have any concerns.</p>
+    </div>
+    <div class="footer">
+      &copy; 2025 0Django - Railway Hackathon. All rights reserved. | Secure Digital Transformation Partner.
+    </div>
+  </div>
+</body>
+</html>
