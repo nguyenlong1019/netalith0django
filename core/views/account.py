@@ -16,13 +16,14 @@ import subprocess
 from urllib.parse import urlencode 
 from django.template.loader import render_to_string 
 from utils.utils import is_valid_email 
+from decouple import config 
 
 
 ACCESS_COOKIE = "access_token"
 REFRESH_COOKIE = "refresh_token"
 
-MAX_AGE_ACCESS = 5*60 if settings.DB_MODE == 'development' else 2*3600
-MAX_AGE_REFRESH = 2*3600 if settings.DB_MODE == 'development' else 60*24*3600
+MAX_AGE_ACCESS =  int(config('MAX_AGE_ACCESS')) if config('MAX_AGE_ACCESS') else 2*3600
+MAX_AGE_REFRESH = int(config('MAX_AGE_REFRESH')) if config('MAX_AGE_REFRESH') else 60*24*3600
  
 
 def login_view(request):
@@ -48,8 +49,8 @@ def login_view(request):
         access = encode_access(user, extra = {'role': 'user'})
         refresh = encode_refresh(user)
 
-        print(access)
-        print(refresh)
+        # print(access)
+        # print(refresh)
 
         resp = redirect(request.GET.get('next') or 'index_view')
         resp.set_cookie(ACCESS_COOKIE, access, **cookie_kwargs(request, max_age=MAX_AGE_ACCESS))
@@ -116,7 +117,7 @@ def register_view(request):
     return render(request, 'core/register.html', status=200)
 
 
-@login_required(login_url='login')
+@login_required(login_url='/login')
 def logout_view(request):
     resp = redirect('index_view')
     resp.delete_cookie(ACCESS_COOKIE)
@@ -125,7 +126,7 @@ def logout_view(request):
     return resp
 
 
-@login_required(login_url='login')
+@login_required(login_url='/login')
 def my_profile_view(request):
     # f = request.user.profile_file 
     # if f and f.name.lower().endswith(('.html', '.htm')):
@@ -144,7 +145,7 @@ def my_profile_view(request):
 from django.views.decorators.http import require_POST 
 @require_POST
 def refresh_token_view(request):
-    print("Refresh token...")
+    # print("Refresh token...")
     raw = request.COOKIES.get(REFRESH_COOKIE)
     if not raw:
         return JsonResponse({

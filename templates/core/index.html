@@ -10,6 +10,19 @@
   <!-- LEFT COLUMN: Build game / Trending games / AI assistant -->
   <!-- Mobile: order-3 | Desktop: order-1 -->
   <aside class="order-3 md:order-1 md:col-span-3 space-y-4">
+    <!-- AI Assistant -->
+    <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+      <h3 class="font-semibold mb-3">Try AI assistant</h3>
+      <div class="text-sm text-gray-600 mb-2">Ask AI about code, games, or posts…</div>
+      <div class="flex gap-2 justify-center">
+        <a href="{% url 'ai_assistant_view' %}"
+          class="flex-shrink-0 px-3 py-2 rounded-lg bg-blue-600 text-white text-sm"
+        >
+          Try Now
+        </a>
+      </div>
+    </div>
+
     <!-- Build Game -->
     <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
       <h3 class="font-semibold mb-3">Build a game</h3>
@@ -41,22 +54,7 @@
       </ul>
     </div>
 
-    <!-- AI Assistant -->
-    <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-      <h3 class="font-semibold mb-3">AI assistant</h3>
-      <div class="text-sm text-gray-600 mb-2">Ask AI about code, games, or posts…</div>
-      <div class="flex gap-2">
-        <input 
-          class="flex-1 min-w-0 border border-gray-200 rounded-lg px-3 py-2 text-sm" 
-          placeholder="Ask something…" 
-        />
-        <button 
-          class="flex-shrink-0 px-3 py-2 rounded-lg bg-blue-600 text-white text-sm"
-        >
-          Send
-        </button>
-      </div>
-    </div>
+    
   </aside>
 
   <!-- Feed -->

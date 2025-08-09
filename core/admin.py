@@ -12,6 +12,7 @@ from core.models.category import Category
 from core.models.page import StaticPage, PageCategory, GroupPage 
 from core.models.blog import Blog, BlogComment
 from core.models.post import Post, PostComment 
+from core.models.assistant import AssistantLog 
 from core.forms import CustomUserChangeForm, CustomUserCreationForm
 
 
@@ -118,7 +119,7 @@ class UserAccountAdmin(UserAdmin, BaseAdmin0Django):
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         ("Personal info", {"fields": ("avatar", "nickname", "first_name", "last_name", "fullname", "title", "gender", "age", "phone", "address", "bio")}),
-        (_("Permissions"), {"fields": ("is_active", "is_staff",
+        (_("Permissions"), {"fields": ("is_verified", "is_active", "is_staff",
                                        "is_superuser", "groups",
                                        "user_permissions")}),
         ("Social", {"fields": ("linkedin", "youtube", "facebook", "instagram", "x", "website")}),
@@ -419,3 +420,11 @@ class PostCommentAdmin(admin.ModelAdmin):
     list_display_links = ['id']
     readonly_fields = ['id', 'created_at', 'updated_at'] 
 
+
+@admin.register(AssistantLog)
+class AssistantLogAdmin(admin.ModelAdmin):
+    search_fields = ['id', 'cid', 'user']
+    list_display = ['id', 'cid', 'updated_at_display',]
+    list_filter = ['created_at', 'updated_at', 'user']
+    list_display_links = ['id']
+    readonly_fields = ['id', 'created_at', 'updated_at'] 

@@ -27,10 +27,10 @@ class ChatGPTService:
         messages = AssistantLog.objects.filter(user=user).order_by('-created_at')
         if messages:
             for m in messages:
-                self.messages.extend({
+                self.messages.extend([
                     {"role": "user", "content": m.user_msg},
                     {"role": "assistant", "content": m.assistant_msg}
-                })
+                ])
 
 
     def call_openai(self, user_content):

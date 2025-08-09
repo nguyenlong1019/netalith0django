@@ -142,7 +142,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Ho_Chi_Minh'
+TIME_ZONE = 'UTC' if DB_MODE == 'development' else 'Asia/Ho_Chi_Minh'
 
 USE_I18N = True
 
@@ -277,6 +277,7 @@ JAZZMIN_SETTINGS = {
         "core.SiteInfo",
         "core.EmailLog",
         "core.AccessLog",
+        "core.AssistantLog",
         "sites", 
         "contenttypes", 
         "sessions", 
@@ -306,6 +307,7 @@ JAZZMIN_SETTINGS = {
         "core.SiteInfo": "fas fa-cog",
         "core.EmailLog": "fas fa-bug",
         "core.AccessLog": "fas fa-wifi",
+        "core.AssistantLog": "fas fa-robot",
         "sites": "fas fa-globe", # site map 
         "sites.Site": "fas fa-link",
         "contenttypes": "fas fa-file", # content type app 

@@ -12,6 +12,7 @@ class AssistantLog(TimeInfo):
     completion_tokens = models.IntegerField(default=0)
     total_tokens = models.IntegerField(default=0)
     cid = models.CharField(max_length=255, null=True, blank=True)
+    test_output = HTMLField(null=True, blank=True)
 
 
     class Meta:
