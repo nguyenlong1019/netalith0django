@@ -14,13 +14,13 @@ urlpatterns = [
     path('ai0django', ai_assistant_view, name='ai_assistant_view'),
     path('feed/', include([
         path('', feed_view, name='feed_view'),
-        path('<category>', feed_category_view, name='feed_category_view'),
-        path('<category>/<title_slug>', feed_detail_view, name='feed_detail_view'),
+        path('<category_slug>', feed_category_view, name='feed_category_view'),
+        path('<category_slug>/<title_slug>', feed_detail_view, name='feed_detail_view'),
     ])),
     path('post/', include([
         path('', post_view, name='post_view'),
-        path('<category>', post_category_view, name='post_category_view'),
-        path('<category>/<title_slug>', post_detail_view, name='post_detail_view'),
+        path('<category_slug>', post_category_view, name='post_category_view'),
+        path('<category_slug>/<title_slug>', post_detail_view, name='post_detail_view'),
     ])),
 ]
 

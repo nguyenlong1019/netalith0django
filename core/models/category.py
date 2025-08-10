@@ -11,7 +11,7 @@ class Category(TimeInfo):
         (2, 'Deleted')
     )
     name = models.CharField(max_length=25, unique=True)
-    slug = models.SlugField(max_length=255, null=True, blank=True)
+    slug = models.SlugField(max_length=25, unique=True, null=True, blank=True)
     status = models.SmallIntegerField(default=0, choices=CATEGORY_STATUS)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 

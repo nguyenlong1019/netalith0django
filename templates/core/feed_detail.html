@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+
+{% block title %}0Django - {% endblock %}
+
+{% block content %}
+
+{% include 'partial/header.html' %}
+
+<!-- Blog Detail -->
+<!-- Page: Blog Detail (TailwindCSS) -->
+<div class="bg-gray-50 min-h-screen">
+
+  <!-- Main -->
+  <main class="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
+    <!-- Article -->
+    <article class="lg:col-span-8">
+      <!-- Meta -->
+      <div class="mb-6">
+        <a href="#" class="inline-flex items-center text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">Post</a>
+        <h1 class="mt-4 text-3xl md:text-4xl font-semibold tracking-tight text-gray-900">
+          Flowbite is an open-source Tailwind UI library with interactive elements
+        </h1>
+        <div class="mt-3 flex flex-wrap items-center gap-3 text-sm text-gray-500">
+          <img src="https://i.pravatar.cc/40?img=12" class="h-8 w-8 rounded-full" alt="Author avatar">
+          <span class="font-medium text-gray-700">Jese Leos</span>
+          <span>•</span>
+          <time datetime="2022-08-03">Aug 3, 2022</time>
+          <span>•</span>
+          <span>9 min read</span>
+          <span class="ml-auto flex items-center gap-3">
+            <a href="#" aria-label="Share on Twitter" class="hover:text-gray-800">↗</a>
+            <a href="#" aria-label="Copy link" class="hover:text-gray-800">🔗</a>
+            <button class="hover:text-gray-800">🔖</button>
+          </span>
+        </div>
+      </div>
+
+      <!-- Hero -->
+      <div class="rounded-2xl overflow-hidden border border-gray-100">
+        <img src="https://images.unsplash.com/photo-1542751110-97427bbecf20?q=80&w=1400" alt="Hero" class="w-full">
+      </div>
+
+      <!-- Content -->
+      <div class="mt-8 space-y-6 text-gray-800 leading-relaxed">
+        <p class="text-lg text-gray-700">
+          Before going digital, you might benefit from scribbling down some ideas in a sketchbook. This way, you can think things through before committing to an actual design project.
+        </p>
+
+        <p>
+          But then I found a component library based on Tailwind CSS called <a href="#" class="text-blue-600 hover:underline">Flowbite</a>.
+          It comes with the most commonly used UI components—buttons, navbars, cards, form elements—and interactive bits like dropdowns, modals, and datepickers.
+        </p>
+
+        <h2 class="text-2xl font-semibold tracking-tight">Why utility-first works</h2>
+        <p>
+          Utility classes make styles composable and predictable. Instead of naming things, you assemble them like LEGO blocks.
+        </p>
+
+        <blockquote class="border-l-4 border-gray-300 bg-white p-4 rounded-md text-gray-700">
+          “Good UI is clear at a glance and delightful on second look.”
+        </blockquote>
+
+        <h3 class="text-xl font-semibold">Quick code example</h3>
+        <pre class="bg-gray-900 text-gray-100 text-sm p-4 rounded-xl overflow-x-auto"><code>&lt;button class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"&gt;Click me&lt;/button&gt;</code></pre>
+
+        <ul class="list-disc pl-6 space-y-1">
+          <li>Accessible by default</li>
+          <li>Composable primitives</li>
+          <li>Great DX with JIT mode</li>
+        </ul>
+
+        <p>
+          For teams, set up a base design-system (colors, spacing, typography) and build on top with shared components.
+        </p>
+
+        <!-- Tags -->
+        <div class="pt-4 flex flex-wrap gap-2">
+          <a href="#" class="px-3 py-1 rounded-full text-xs bg-gray-100">#tailwindcss</a>
+          <a href="#" class="px-3 py-1 rounded-full text-xs bg-gray-100">#ui</a>
+          <a href="#" class="px-3 py-1 rounded-full text-xs bg-gray-100">#frontend</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Right Sidebar -->
+    <aside class="lg:col-span-4">
+      <div class="sticky top-24">
+        <div class="space-y-6">
+          <!-- Author card -->
+          <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+            <div class="flex items-center gap-4">
+              <img src="https://i.pravatar.cc/72?img=12" class="h-16 w-16 rounded-full" alt="Author">
+              <div>
+                <div class="font-semibold">Jese Leos</div>
+                <div class="text-sm text-gray-500">Product Designer</div>
+              </div>
+            </div>
+            <p class="mt-3 text-sm text-gray-600">
+              Designing approachable experiences. Writing about design systems and UX craft.
+            </p>
+            <div class="mt-4 flex items-center gap-3 text-sm text-gray-600">
+              <span>✍️ 42 posts</span>
+              <span>•</span>
+              <span>👥 12k followers</span>
+            </div>
+            <div class="mt-4">
+              <button class="w-full py-2 rounded-lg bg-gray-900 text-white text-sm">Follow</button>
+            </div>
+          </div>
+
+          <!-- Latest news -->
+          <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+              <h3 class="font-semibold">Latest news</h3>
+              <a href="#" class="text-sm text-blue-600 hover:underline">All</a>
+            </div>
+            <ul class="mt-4 space-y-4">
+              <li class="flex gap-4">
+                <img src="https://images.unsplash.com/photo-1557800636-894a64c1696f?q=80&w=300" class="h-16 w-24 object-cover rounded-md" alt="">
+                <div class="text-sm">
+                  <a class="font-medium hover:underline" href="#">Our first office</a>
+                  <p class="text-gray-500">Over the past year, Volosoft has undergone changes.</p>
+                  <div class="text-gray-400 mt-1">Read in 9 minutes</div>
+                </div>
+              </li>
+              <li class="flex gap-4">
+                <img src="https://images.unsplash.com/photo-1556761175-129418cb2dfe?q=80&w=300" class="h-16 w-24 object-cover rounded-md" alt="">
+                <div class="text-sm">
+                  <a class="font-medium hover:underline" href="#">Enterprise design tips</a>
+                  <p class="text-gray-500">What we learned scaling a design system.</p>
+                  <div class="text-gray-400 mt-1">Read in 14 minutes</div>
+                </div>
+              </li>
+              <li class="flex gap-4">
+                <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=300" class="h-16 w-24 object-cover rounded-md" alt="">
+                <div class="text-sm">
+                  <a class="font-medium hover:underline" href="#">Partnered up with Google</a>
+                  <p class="text-gray-500">A new chapter for our platform and users.</p>
+                  <div class="text-gray-400 mt-1">Read in 6 minutes</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Comments -->
+  <section class="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 pb-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div class="lg:col-span-8">
+        <h2 class="text-2xl font-semibold tracking-tight mb-4">Comments</h2>
+
+        <!-- New comment -->
+        <form class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm mb-6">
+          <div class="flex gap-3">
+            <img src="https://i.pravatar.cc/40?img=5" class="h-10 w-10 rounded-full" alt="">
+            <div class="flex-1">
+              <textarea rows="4" placeholder="Write a comment..." class="w-full rounded-lg border-gray-200 focus:ring-2 focus:ring-gray-900/10"></textarea>
+              <div class="mt-3 flex items-center justify-between">
+                <span class="text-xs text-gray-500">Be respectful. Keep it clean.</span>
+                <button type="submit" class="px-4 py-2 rounded-lg bg-gray-900 text-white text-sm">Post comment</button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <!-- Comment list -->
+        <ul class="space-y-4">
+          <li class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+            <div class="flex gap-3">
+              <img src="https://i.pravatar.cc/40?img=13" class="h-10 w-10 rounded-full" alt="">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 text-sm">
+                  <span class="font-medium">Alex Morgan</span>
+                  <span class="text-gray-400">•</span>
+                  <time class="text-gray-400">2 hours ago</time>
+                </div>
+                <p class="mt-1 text-gray-700">Loved the examples and the explanation about composable utilities.</p>
+                <div class="mt-2 flex items-center gap-4 text-sm text-gray-500">
+                  <button class="hover:text-gray-800">👍 12</button>
+                  <button class="hover:text-gray-800">Reply</button>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+            <div class="flex gap-3">
+              <img src="https://i.pravatar.cc/40?img=9" class="h-10 w-10 rounded-full" alt="">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 text-sm">
+                  <span class="font-medium">Priya Kapoor</span>
+                  <span class="text-gray-400">•</span>
+                  <time class="text-gray-400">1 day ago</time>
+                </div>
+                <p class="mt-1 text-gray-700">We switched to a Tailwind-based DS last quarter. Productivity improved a lot.</p>
+                <div class="mt-2 flex items-center gap-4 text-sm text-gray-500">
+                  <button class="hover:text-gray-800">👍 5</button>
+                  <button class="hover:text-gray-800">Reply</button>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related articles -->
+  <section class="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 pb-16">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-semibold tracking-tight">Related articles</h2>
+      <a href="#" class="text-sm text-blue-600 hover:underline">View all</a>
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- card -->
+      <a href="#" class="group bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+        <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1200" class="h-44 w-full object-cover" alt="">
+        <div class="p-4">
+          <div class="text-xs text-gray-500 mb-1">Aug 12 • 7 min read</div>
+          <h3 class="font-semibold group-hover:underline">How to build a component library with Tailwind</h3>
+          <p class="mt-1 text-sm text-gray-600">Set up tokens, primitives, and scalable patterns…</p>
+        </div>
+      </a>
+
+      <a href="#" class="group bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+        <img src="https://images.unsplash.com/photo-1556761175-129418cb2dfe?q=80&w=1200" class="h-44 w-full object-cover" alt="">
+        <div class="p-4">
+          <div class="text-xs text-gray-500 mb-1">Jul 30 • 5 min read</div>
+          <h3 class="font-semibold group-hover:underline">Design tokens you won’t regret later</h3>
+          <p class="mt-1 text-sm text-gray-600">Naming, scales, and a future-proof structure…</p>
+        </div>
+      </a>
+
+      <a href="#" class="group bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+        <img src="https://images.unsplash.com/photo-1557800636-894a64c1696f?q=80&w=1200" class="h-44 w-full object-cover" alt="">
+        <div class="p-4">
+          <div class="text-xs text-gray-500 mb-1">Jun 18 • 8 min read</div>
+          <h3 class="font-semibold group-hover:underline">Shipping faster with utility-first CSS</h3>
+          <p class="mt-1 text-sm text-gray-600">Real-world tips from product teams.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+</div>
+
+{% include 'partial/footer.html' %}
+
+{% endblock %}
