@@ -29,3 +29,23 @@ class Category(TimeInfo):
         if not self.slug:
             self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
+
+
+class Tag(TimeInfo):
+    name = models.CharField(max_length=25, unique=True)
+    hash_name = models.CharField(max_length=31, unique=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+
+    class Tags:
+        db_table = 'tags'
+        verbose_name_plural = 'Tag'
+
+    
+    def __str__(self):
+        return self.name
+    
+
+    def save(self, *args, **kwargs):
+        self.hash_name = "#" + slugify(self.name)
+        super(Tag, self).save(*args, **kwargs)

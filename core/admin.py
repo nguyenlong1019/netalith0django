@@ -8,10 +8,9 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 from utils.utils import to_localdate 
 from core.models.site_info import SiteInfo 
-from core.models.category import Category 
+from core.models.category import Category, Tag 
 from core.models.page import StaticPage, PageCategory, GroupPage 
-from core.models.blog import Blog, BlogComment
-from core.models.post import Post, PostComment 
+from core.models.feed import Feed, FeedComment 
 from core.models.assistant import AssistantLog 
 from core.forms import CustomUserChangeForm, CustomUserCreationForm
 
@@ -102,6 +101,35 @@ class BaseAdminContent(admin.ModelAdmin):
             if not request.user.is_superuser:
                 original = type(obj).objects.only('author').get(pk=obj.pk)
                 obj.author_id = original.author_id
+        super().save_model(request, obj, form, change)
+
+
+class BaseCollectionAdmin(admin.ModelAdmin):
+    def has_change_permission(self, request, obj = None):
+        if request.user.is_superuser:
+            return True 
+        if self._is_user0(request):
+            if obj is None:
+                return True 
+            return obj.created_by_id == request.user.id 
+        return super().has_change_permission(request, obj)
+    
+
+    def get_readonly_fields(self, request, obj=None):
+        ro = list(super().get_readonly_fields(request, obj))
+        if self._is_user0(request):
+            ro += ['created_by']
+        return ro
+    
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            if not request.user.is_superuser:
+                obj.created_by = request.user
+        else:
+            if not request.user.is_superuser:
+                original = type(obj).objects.only('created_by').get(pk=obj.pk)
+                obj.created_by_id = original.created_by_id
         super().save_model(request, obj, form, change)
 
 
@@ -243,7 +271,7 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
 
 @admin.register(Category)
-class CategoryAdmin(BaseAdmin0Django):
+class CategoryAdmin(BaseAdmin0Django, BaseCollectionAdmin):
     search_fields = ['id', 'name',]
     list_display = ['id', 'name', 'updated_at_display',]
     list_filter = ['created_at', 'updated_at']
@@ -280,32 +308,40 @@ class CategoryAdmin(BaseAdmin0Django):
         return qs
 
 
-    def has_change_permission(self, request, obj = None):
-        if request.user.is_superuser:
-            return True 
-        if self._is_user0(request):
-            if obj is None:
-                return True 
-            return obj.created_by_id == request.user.id 
-        return super().has_change_permission(request, obj)
-    
+@admin.register(Tag)
+class TagAdmin(BaseAdmin0Django, BaseCollectionAdmin):
+    search_fields = ['id', 'name',]
+    list_display = ['id', 'name', 'updated_at_display',]
+    list_filter = ['created_at', 'updated_at']
+    list_display_links = ['id']
+    readonly_fields = ['id', 'created_at', 'updated_at'] 
 
+
+    def get_fieldsets(self, request, obj = None):
+        if obj is None:
+            return (
+                (None, {'fields': ('name',)}),
+            )
+        else:
+            if request.user.is_superuser:
+                return (
+                    (None, {"fields": ("name", "hash_name",)}),
+                    ("Dates", {"fields": ("created_at", "updated_at")}),
+                    ("Owner", {"fields": ("created_by",)}),
+                )
+            else:
+                return (
+                    (None, {"fields": ("name", "hash_name",)}),
+                    ("Dates", {"fields": ("created_at", "updated_at")}),
+                    ("Owner", {"fields": ("created_by",)}),
+                )
+            
+    
     def get_readonly_fields(self, request, obj=None):
         ro = list(super().get_readonly_fields(request, obj))
         if self._is_user0(request):
-            ro += ['created_by']
+            ro += ['hash_name']
         return ro
-    
-
-    def save_model(self, request, obj, form, change):
-        if not change:
-            if not request.user.is_superuser:
-                obj.created_by = request.user
-        else:
-            if not request.user.is_superuser:
-                original = type(obj).objects.only('created_by').get(pk=obj.pk)
-                obj.created_by_id = original.created_by_id
-        super().save_model(request, obj, form, change)
 
 
 @admin.register(PageCategory)
@@ -335,26 +371,27 @@ class StaticPageAdmin(admin.ModelAdmin):
     readonly_fields = ['id', 'created_at', 'updated_at'] 
 
 
-class BlogCommentStacked(admin.StackedInline):
-    model = BlogComment 
+class FeedCommentStacked(admin.StackedInline):
+    model = FeedComment 
     extra = 1
 
 
-@admin.register(Blog)
-class BlogAdmin(BaseAdmin0Django, BaseAdminContent):
+@admin.register(Feed)
+class FeedAdmin(BaseAdmin0Django, BaseAdminContent):
     search_fields = ['id', 'title']
     list_display = ['id', 'title', 'updated_at_display']
     list_filter = ['author', 'category', 'created_at', 'updated_at']
     list_display_links = ['id']
     readonly_fields = ['id', 'created_at', 'updated_at']
-    inlines = [BlogCommentStacked]
+    inlines = [FeedCommentStacked]
 
     fieldsets = (
-        ('Edit Blog', {
+        ('Feed', {
             'fields': (
-                'id', 'title', 'category', 'status', 'content', 'thumb', 'slug', 'total_comment'
+                'id', 'type', 'title', 'category', 'tags', 'status', 'content', 'banner', 'slug',
             )
         }),
+        ("Statistic", {"fields": ('total_comment', "total_view", 'total_react')}),
         ("Dates", {"fields": ("created_at", "updated_at")}),
         ("Owner", {"fields": ("author",)}),
         ('SEO Info', {
@@ -368,55 +405,21 @@ class BlogAdmin(BaseAdmin0Django, BaseAdminContent):
         qs = super().get_queryset(request)
         if self._is_user0(request):
             return qs.filter(author=request.user)
-        return qs
+        return qs 
     
 
-@admin.register(BlogComment)
-class BlogCommentAdmin(admin.ModelAdmin):
-    search_fields = ['id', 'blog', 'user']
-    list_display = ['id', 'user', 'blog']
-    list_filter = ['user', 'blog', 'created_at', 'updated_at']
-    list_display_links = ['id']
-    readonly_fields = ['id', 'created_at', 'updated_at'] 
-
-
-class PostCommentStacked(admin.StackedInline):
-    model = PostComment 
-    extra = 1
-
-
-@admin.register(Post)
-class PostAdmin(BaseAdmin0Django, BaseAdminContent):
-    search_fields = ['id', 'author', 'pid']
-    list_display = ['id', 'author', 'pid', 'updated_at_display']
-    list_filter = ['author', 'category', 'created_at', 'updated_at']
-    list_display_links = ['id']
-    readonly_fields = ['id', 'created_at', 'updated_at'] 
-    inlines = [PostCommentStacked]
-
-    fieldsets = (
-        ('Edit Post', {
-            'fields': (
-                'id', 
-                'category', 'status', 'feed', 'total_react', 'total_comment',
-            )
-        }),
-        ("Dates", {"fields": ("created_at", "updated_at")}),
-        ("Owner", {"fields": ("author",)}),
-    )
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
+    def get_readonly_fields(self, request, obj=None):
+        ro = list(super().get_readonly_fields(request, obj))
         if self._is_user0(request):
-            return qs.filter(author=request.user)
-        return qs
+            ro += ['total_comment', 'total_view', 'total_react']
+        return ro
+    
 
-
-@admin.register(PostComment)
-class PostCommentAdmin(admin.ModelAdmin):
-    search_fields = ['id', 'post', 'user']
-    list_display = ['id', 'user', 'post']
-    list_filter = ['user', 'post', 'created_at', 'updated_at']
+@admin.register(FeedComment)
+class FeedCommentAdmin(admin.ModelAdmin):
+    search_fields = ['id', 'feed', 'user']
+    list_display = ['id', 'user', 'feed']
+    list_filter = ['user', 'feed', 'created_at', 'updated_at']
     list_display_links = ['id']
     readonly_fields = ['id', 'created_at', 'updated_at'] 
 

@@ -4,6 +4,10 @@ from core.models.assistant import AssistantLog
 
 
 def index_view(request):
+    latest = []
+    top = []
+    
+
     return render(request, 'core/index.html', status=200)
 
 

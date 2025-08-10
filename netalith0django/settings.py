@@ -222,7 +222,7 @@ JAZZMIN_SETTINGS = {
     "copyright": "HK2 Team, 2025",
 
     # If you want to use a single search field you dont need to use a list, you can use a simple string 
-    "search_model": ["core.Post", "core.Blog"],
+    "search_model": ["core.Feed",],
 
     # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
     "user_avatar": None,
@@ -267,10 +267,9 @@ JAZZMIN_SETTINGS = {
         "core", # custom core app 
         "core.User",
         "core.Category",
-        "core.Blog", 
-        "core.BlogComment",
-        "core.Post",
-        "core.PostComment",
+        "core.Tag",
+        "core.Feed", 
+        "core.FeedComment",
         "core.PageCategory",
         "core.GroupPage",
         "core.StaticPage",
@@ -297,10 +296,9 @@ JAZZMIN_SETTINGS = {
         "auth.Group": "fas fa-users",
         "core.User": "fas fa-user-circle",
         "core.Category": "fas fa-layer-group",
-        "core.Blog": "fab fa-envira", 
-        "core.BlogComment": "fas fa-comments",
-        "core.Post": "far fa-window-restore",
-        "core.PostComment": "fas fa-envelope",
+        "core.Tag": "fas fa-tags",
+        "core.Feed": "fab fa-envira", 
+        "core.FeedComment": "fas fa-comments",
         "core.PageCategory": "fas fa-clipboard-list",
         "core.GroupPage": "fas fa-sitemap",
         "core.StaticPage": "fas fa-code",

@@ -7,24 +7,14 @@ Use in:
 https://flowbite.com/blocks/
 
 feat: 
-auth (done) - bổ sung 1 task schedule 1 ngày quét và xóa các acc k verify - trừ acc superadmin, profile (done), blog, post, AI assistant, JS game
+auth (done) - bổ sung 1 task schedule 1 ngày quét và xóa các acc k verify - trừ acc superadmin, profile (done) - bổ sung thêm recent post and blog, 
+blog, post, AI assistant (done), JS game
+
+blog, post, -> show, admin statistic -> 
 
 tool -> source code -> paste -> save
 
-
-auth: 
-khi user register cần phải có email confirm -> từ đó mới user accept 
-
-auth: khi create blog and post (bảo mật tránh spam: sử dụng access token custom ví dụ
-payload sẽ bổ sung thêm )
--> khi user login thành công -> gen access token và refresh token -> lưu vào cookie 
-khi call 1 api method ví dụ POST, PUT, DELETE sẽ cần access token nếu access token -> 
-hết hạn -> dùng refresh token để get new access token -> nếu refresh token cũng k còn hợp lệ
--> logout -> redirect đến trang login 
--> 
-
-ask AI: oauth 
-
+user -> auto delete avatar on change avatar or on delete 
 
 -> quay một video demo để up lên youtube, facebook, fanpage -> có description bằng tiếng Anh 
 short demo up lên tiktok 
