@@ -10,48 +10,54 @@
   <!-- LEFT COLUMN: Build game / Trending games / AI assistant -->
   <!-- Mobile: order-3 | Desktop: order-1 -->
   <aside class="order-3 md:order-1 md:col-span-3 space-y-4">
-    <!-- AI Assistant -->
-    <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-      <h3 class="font-semibold mb-3">Try AI assistant</h3>
-      <div class="text-sm text-gray-600 mb-2">Ask AI about code, games, or posts…</div>
-      <div class="flex gap-2 justify-center">
-        <a href="{% url 'ai_assistant_view' %}"
-          class="flex-shrink-0 px-3 py-2 rounded-lg bg-blue-600 text-white text-sm"
-        >
-          Try Now
-        </a>
-      </div>
-    </div>
+    <div class="sticky top-20">
+      <div class="space-y-4 max-h-[calc(100vh-5rem)] overflow-y-auto">
 
-    <!-- Build Game -->
-    <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-      <h3 class="font-semibold mb-3">Build a game</h3>
-      <p class="text-sm text-gray-600 mb-3">
-        Upload a ZIP (index.html + assets) to host an HTML5 game.
-      </p>
-      <div class="flex gap-2">
-        <a href="#" class="flex-1 text-center border border-gray-100 rounded-lg py-2 hover:bg-gray-50">Upload ZIP</a>
-        <a href="#" class="flex-1 text-center border border-gray-100 rounded-lg py-2 hover:bg-gray-50">Create script</a>
-      </div>
-    </div>
+        <!-- AI Assistant -->
+        <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+          <h3 class="font-semibold mb-3">Try AI assistant</h3>
+          <div class="text-sm text-gray-600 mb-2">Ask AI about code, games, or posts…</div>
+          <div class="flex gap-2 justify-center">
+            <a href="{% url 'ai_assistant_view' %}"
+              class="flex-shrink-0 px-3 py-2 rounded-lg bg-blue-600 text-white text-sm"
+            >
+              Try Now
+            </a>
+          </div>
+        </div>
+    
+        <!-- Build Game -->
+        <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+          <h3 class="font-semibold mb-3">Build a game</h3>
+          <p class="text-sm text-gray-600 mb-3">
+            Upload a ZIP (index.html + assets) to host an HTML5 game.
+          </p>
+          <div class="flex gap-2">
+            <a href="#" class="flex-1 text-center border border-gray-100 rounded-lg py-2 hover:bg-gray-50">Upload ZIP</a>
+            <a href="#" class="flex-1 text-center border border-gray-100 rounded-lg py-2 hover:bg-gray-50">Create script</a>
+          </div>
+        </div>
+    
+        <!-- Trending Games -->
+        <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+          <h3 class="font-semibold mb-3">Trending games</h3>
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-center gap-3">
+              <img src="https://picsum.photos/seed/1/48/48" class="rounded-md" alt="Space Runner cover">
+              <a href="#" class="hover:underline">Space Runner</a>
+            </li>
+            <li class="flex items-center gap-3">
+              <img src="https://picsum.photos/seed/2/48/48" class="rounded-md" alt="Tower Defense cover">
+              <a href="#" class="hover:underline">Tower Defense</a>
+            </li>
+            <li class="flex items-center gap-3">
+              <img src="https://picsum.photos/seed/3/48/48" class="rounded-md" alt="2048 Plus cover">
+              <a href="#" class="hover:underline">2048 Plus</a>
+            </li>
+          </ul>
+        </div>
 
-    <!-- Trending Games -->
-    <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-      <h3 class="font-semibold mb-3">Trending games</h3>
-      <ul class="space-y-3 text-sm">
-        <li class="flex items-center gap-3">
-          <img src="https://picsum.photos/seed/1/48/48" class="rounded-md" alt="Space Runner cover">
-          <a href="#" class="hover:underline">Space Runner</a>
-        </li>
-        <li class="flex items-center gap-3">
-          <img src="https://picsum.photos/seed/2/48/48" class="rounded-md" alt="Tower Defense cover">
-          <a href="#" class="hover:underline">Tower Defense</a>
-        </li>
-        <li class="flex items-center gap-3">
-          <img src="https://picsum.photos/seed/3/48/48" class="rounded-md" alt="2048 Plus cover">
-          <a href="#" class="hover:underline">2048 Plus</a>
-        </li>
-      </ul>
+      </div>
     </div>
 
     
@@ -60,91 +66,133 @@
   <!-- Feed -->
   <!-- Mobile: order-1 | Desktop: order-2 -->
   <section class="order-1 md:order-2 md:col-span-6">
-  <!-- Tabs header -->
-  <div class="mb-4 flex items-center justify-between">
-    <div class="inline-flex rounded-lg bg-gray-100 p-1">
-      <button
-        type="button"
-        class="tab-btn px-4 py-2 text-sm rounded-md transition"
-        data-tab="latest"
-        aria-controls="panel-latest"
-        aria-selected="true"
-      >
-        Latest
-      </button>
-      <button
-        type="button"
-        class="tab-btn px-4 py-2 text-sm rounded-md transition"
-        data-tab="top"
-        aria-controls="panel-top"
-        aria-selected="false"
-      >
-        Top
-      </button>
+    <!-- Tabs header -->
+    <div class="mb-4 flex items-center justify-between">
+      <div class="inline-flex rounded-lg bg-gray-100 p-1">
+        <button
+          type="button"
+          class="tab-btn px-4 py-2 text-sm rounded-md transition"
+          data-tab="latest"
+          aria-controls="panel-latest"
+          aria-selected="true"
+        >
+          Latest
+        </button>
+        <button
+          type="button"
+          class="tab-btn px-4 py-2 text-sm rounded-md transition"
+          data-tab="top"
+          aria-controls="panel-top"
+          aria-selected="false"
+        >
+          Top
+        </button>
+      </div>
     </div>
-  </div>
 
-  <!-- Panels -->
-  <div id="panel-latest" role="tabpanel" class="space-y-4">
-    <!-- POST card -->
-    <article class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-      <div class="flex items-center gap-2 mb-2">
-        <span class="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">POST</span>
-        <span class="text-xs text-gray-500">by <a href="#" class="hover:underline">@alice</a> • 2h</span>
-      </div>
-      <h2 class="font-semibold text-lg">Q&A: How to embed an HTML5 game in a post?</h2>
-      <p class="mt-2 text-sm text-gray-600">
-        I want to upload a ZIP that contains index.html + assets and embed it inside a post.
-        What folder structure is needed to make it run?
-      </p>
-      <div class="mt-3 flex items-center justify-between text-sm text-gray-600">
-        <div class="flex items-center gap-4">
-          <span>💬 12</span><span>👍 45</span><span>#gamedev</span>
-        </div>
-        <a href="post-detail.html" class="text-blue-600 hover:underline">View discussion →</a>
-      </div>
-    </article>
+    <!-- Panels -->
+    <div id="panel-latest" role="tabpanel" class="space-y-4">
+      {% for feed in latest %}
+        <!-- card -->
+        {% if feed.type == 'feed' %}
+          <article class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">Feed</span>
+              <span class="text-xs text-gray-500">by <a href="#" class="hover:underline">@{{feed.author}}</a> • {{feed.created_at|timesince}} ago</span>
+            </div>
+            <h2 class="font-semibold text-lg">{{feed.title}}</h2>
+            {% if feed.short_description %}
+            <p class="mt-2 text-sm text-gray-600">
+              {{feed.short_description}}
+            </p>
+            {% endif %}
+            <div class="mt-3 flex items-center justify-between text-sm text-gray-600">
+              <div class="flex items-center gap-4">
+                <span>💬 12</span><span>👍 45</span>
+                {% for tag in feed.tags.all %}
+                  <span>{{tag.hash_name}}</span>
+                {% endfor %}
+              </div>
+              <a href="post-detail.html" class="text-blue-600 hover:underline">View discussion →</a>
+            </div>
+          </article>
+        {% else %}
+          <article class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">Post</span>
+              <span class="text-xs text-gray-500">by <a href="#" class="hover:underline">@{{feed.author}}</a> • {{feed.created_at|timesince}} ago</span>
+            </div>
+            <h2 class="font-semibold text-lg">{{feed.title}}</h2>
+            {% if feed.short_description %}
+            <p class="mt-2 text-sm text-gray-600">
+              {{feed.short_description}}
+            </p>
+            {% endif %}
+            <div class="mt-3 flex items-center justify-between text-sm text-gray-600">
+              <div class="flex items-center gap-4">
+                <span>👍 120</span>
+                {% for tag in feed.tags.all %}
+                  <span>{{tag.hash_name}}</span>
+                {% endfor %}
+              </div>
+              <a href="blog-detail.html" class="text-blue-600 hover:underline">Read post →</a>
+            </div>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
 
-    <!-- BLOG card -->
-    <article class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-      <div class="flex items-center gap-2 mb-2">
-        <span class="text-xs px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">BLOG</span>
-        <span class="text-xs text-gray-500">by <a href="#" class="hover:underline">@bob</a> • 5h</span>
-      </div>
-      <h2 class="font-semibold text-lg">Build an interactive blog: AI + Game + Script Runner</h2>
-      <p class="mt-2 text-sm text-gray-600">
-        A multi-service architecture on Railway that lets you generate content with AI,
-        host HTML5 games, and run scripts safely.
-      </p>
-      <div class="mt-3 flex items-center justify-between text-sm text-gray-600">
-        <div class="flex items-center gap-4">
-          <span>👍 120</span><span>#ai #tailwindcss</span>
-        </div>
-        <a href="blog-detail.html" class="text-blue-600 hover:underline">Read blog →</a>
-      </div>
-    </article>
-  </div>
-
-  <div id="panel-top" role="tabpanel" class="space-y-4 hidden">
-    <!-- ví dụ card “Top” -->
-    <article class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-      <div class="flex items-center gap-2 mb-2">
-        <span class="text-xs px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">BLOG</span>
-        <span class="text-xs text-gray-500">by <a href="#" class="hover:underline">@sara</a> • 1d</span>
-      </div>
-      <h2 class="font-semibold text-lg">Top of the week: Shipping an AI + Game template</h2>
-      <p class="mt-2 text-sm text-gray-600">
-        Lessons learned while building a public Railway template with AI assistant and game hosting.
-      </p>
-      <div class="mt-3 flex items-center justify-between text-sm text-gray-600">
-        <div class="flex items-center gap-4">
-          <span>👍 980</span><span>#ai #gamedev</span>
-        </div>
-        <a href="blog-detail.html" class="text-blue-600 hover:underline">Read blog →</a>
-      </div>
-    </article>
-  </div>
-</section>
+    <div id="panel-top" role="tabpanel" class="space-y-4 hidden">
+      {% for feed in top %}
+        <!-- card -->
+        {% if feed.type == 'feed' %}
+          <article class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">Feed</span>
+              <span class="text-xs text-gray-500">by <a href="#" class="hover:underline">@{{feed.author}}</a> • {{feed.created_at|timesince}} ago</span>
+            </div>
+            <h2 class="font-semibold text-lg">{{feed.title}}</h2>
+            {% if feed.short_description %}
+            <p class="mt-2 text-sm text-gray-600">
+              {{feed.short_description}}
+            </p>
+            {% endif %}
+            <div class="mt-3 flex items-center justify-between text-sm text-gray-600">
+              <div class="flex items-center gap-4">
+                <span>💬 12</span><span>👍 45</span>
+                {% for tag in feed.tags.all %}
+                  <span>{{tag.hash_name}}</span>
+                {% endfor %}
+              </div>
+              <a href="post-detail.html" class="text-blue-600 hover:underline">View discussion →</a>
+            </div>
+          </article>
+        {% else %}
+          <article class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">Post</span>
+              <span class="text-xs text-gray-500">by <a href="#" class="hover:underline">@{{feed.author}}</a> • {{feed.created_at|timesince}} ago</span>
+            </div>
+            <h2 class="font-semibold text-lg">{{feed.title}}</h2>
+            {% if feed.short_description %}
+            <p class="mt-2 text-sm text-gray-600">
+              {{feed.short_description}}
+            </p>
+            {% endif %}
+            <div class="mt-3 flex items-center justify-between text-sm text-gray-600">
+              <div class="flex items-center gap-4">
+                <span>👍 120</span>
+                {% for tag in feed.tags.all %}
+                  <span>{{tag.hash_name}}</span>
+                {% endfor %}
+              </div>
+              <a href="blog-detail.html" class="text-blue-600 hover:underline">Read post →</a>
+            </div>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.tab-btn');
@@ -179,33 +227,41 @@
   <!-- RIGHT: Quick create / Tags / Top authors -->
   <!-- Mobile: order-2 | Desktop: order-3 -->
   <aside class="order-2 md:order-3 md:col-span-3 space-y-4">
-    <!-- Quick create -->
-    <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm space-y-3">
-      <h3 class="font-semibold">Quick create</h3>
-      <a href="create.html#post" class="block text-center w-full border border-gray-100 rounded-lg py-2 hover:bg-gray-50">Write a Post</a>
-      <a href="create.html#blog" class="block text-center w-full border border-gray-100 rounded-lg py-2 hover:bg-gray-50">Write a Blog</a>
+
+    <div class="sticky top-20">
+      <div class="space-y-4 max-h-[calc(100vh-5rem)] overflow-y-auto">
+
+        <!-- Quick create -->
+        <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm space-y-3">
+          <h3 class="font-semibold">Quick create</h3>
+          <a href="create.html#post" class="block text-center w-full border border-gray-100 rounded-lg py-2 hover:bg-gray-50">Write a Post</a>
+          <a href="create.html#blog" class="block text-center w-full border border-gray-100 rounded-lg py-2 hover:bg-gray-50">Write a Blog</a>
+        </div>
+    
+        <!-- Tags -->
+        <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+          <h3 class="font-semibold mb-3">Tags</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:underline">#javascript</a></li>
+            <li><a href="#" class="hover:underline">#ai</a></li>
+            <li><a href="#" class="hover:underline">#tailwindcss</a></li>
+            <li><a href="#" class="hover:underline">#gamedev</a></li>
+          </ul>
+        </div>
+    
+        <!-- Top authors -->
+        <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+          <h3 class="font-semibold mb-3">Top authors</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:underline">@alice</a></li>
+            <li><a href="#" class="hover:underline">@bob</a></li>
+            <li><a href="#" class="hover:underline">@charlie</a></li>
+          </ul>
+        </div>
+
+      </div>
     </div>
 
-    <!-- Tags -->
-    <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-      <h3 class="font-semibold mb-3">Tags</h3>
-      <ul class="space-y-2 text-sm">
-        <li><a href="#" class="hover:underline">#javascript</a></li>
-        <li><a href="#" class="hover:underline">#ai</a></li>
-        <li><a href="#" class="hover:underline">#tailwindcss</a></li>
-        <li><a href="#" class="hover:underline">#gamedev</a></li>
-      </ul>
-    </div>
-
-    <!-- Top authors -->
-    <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-      <h3 class="font-semibold mb-3">Top authors</h3>
-      <ul class="space-y-2 text-sm">
-        <li><a href="#" class="hover:underline">@alice</a></li>
-        <li><a href="#" class="hover:underline">@bob</a></li>
-        <li><a href="#" class="hover:underline">@charlie</a></li>
-      </ul>
-    </div>
   </aside>
 </main>
 

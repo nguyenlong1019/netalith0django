@@ -13,6 +13,7 @@ from core.models.page import StaticPage, PageCategory, GroupPage
 from core.models.feed import Feed, FeedComment 
 from core.models.assistant import AssistantLog 
 from core.forms import CustomUserChangeForm, CustomUserCreationForm
+from django.core.exceptions import ValidationError
 
 
 @admin.register(ContentType)
@@ -388,7 +389,7 @@ class FeedAdmin(BaseAdmin0Django, BaseAdminContent):
     fieldsets = (
         ('Feed', {
             'fields': (
-                'id', 'type', 'title', 'category', 'tags', 'status', 'content', 'banner', 'slug',
+                'id', 'type', 'title', 'short_description', 'category', 'tags', 'status', 'content', 'banner', 'slug',
             )
         }),
         ("Statistic", {"fields": ('total_comment', "total_view", 'total_react')}),

@@ -21,18 +21,18 @@ PUBLISH_STATUS = (
 class Feed(TimeInfo, SEOBasicAbstract):
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     type = models.CharField(max_length=15, default='feed', choices=(('feed', 'Feed'), ('academic', 'Academic')), db_index=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, limit_choices_to={'status': 1},)
-    tags = models.ManyToManyField(Tag)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, limit_choices_to={'status': 1}, help_text='Category must be publish status')
+    tags = models.ManyToManyField(Tag, help_text='Max 5 tags. If more, extra tags will be truncated.')
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=300, null=True, blank=True)
-    content = HTMLField(null=True, blank=True)
+    content = HTMLField(null=True, blank=True, help_text='For academic type, content must not be empty; if empty, the feed will be saved as Draft.')
     status = models.SmallIntegerField(default=0, choices=PUBLISH_STATUS)
     total_comment = models.IntegerField(default=0)
     total_view = models.IntegerField(default=0)
     total_react = models.IntegerField(default=0)
     banner = models.FileField(upload_to='feed/', null=True, blank=True, validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp', 'avif'])])
     pid = models.CharField(max_length=32, unique=True, default=gen_hex)
-    has_detail = models.BooleanField(default=False)
+    short_description = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Feed'
@@ -63,16 +63,6 @@ class Feed(TimeInfo, SEOBasicAbstract):
         return self.total_comment + self.total_view + self.total_react 
     
 
-    def clean(self):
-        if self.category and self.category.status != 1:
-            raise ValidationError({'category': 'Category must be Published.'})
-        if self.type == 'academic':
-            if not self.content or not str(self.content).strip():
-                raise ValidationError({'content': 'Content is required with Academic type.'})
-        if self.type == 'academic' and (not self.title or not self.title.strip()):
-            raise ValidationError({'title': 'Title is required with Academic type.'})
-
-
     def save(self, *args, **kwargs):
         self.full_clean()
         
@@ -82,11 +72,12 @@ class Feed(TimeInfo, SEOBasicAbstract):
                 self.slug = slugify(self.title) + "_" + f"{time.time() * 1000}"
             else:
                 self.slug = slugify(self.title)
-        if self.content:
-            self.has_detail = True
-        else:
-            self.has_detail = False 
+        if self.type == 'academic' and not self.content:
+            self.status = 0
+
         super(Feed, self).save(*args, **kwargs)
+        if self.tags.count() > 5:
+            self.tags.set(self.tags.all()[:5])
 
 
 class FeedComment(TimeInfo):
