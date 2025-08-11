@@ -381,7 +381,7 @@ class FeedCommentStacked(admin.StackedInline):
 class FeedAdmin(BaseAdmin0Django, BaseAdminContent):
     search_fields = ['id', 'title']
     list_display = ['id', 'title', 'updated_at_display']
-    list_filter = ['author', 'category', 'created_at', 'updated_at']
+    list_filter = ['type', 'author', 'category', 'created_at', 'updated_at']
     list_display_links = ['id']
     readonly_fields = ['id', 'created_at', 'updated_at']
     inlines = [FeedCommentStacked]

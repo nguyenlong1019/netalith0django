@@ -14,3 +14,4 @@ whitenoise==6.9.0
 requests==2.32.4
 PyJWT==2.7.0
 itsdangerous==2.2.0
+APScheduler==3.11.0

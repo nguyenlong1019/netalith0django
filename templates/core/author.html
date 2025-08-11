@@ -2,27 +2,29 @@
 
 {% load static %}
 
+{% block title %} Author - {{author.nickname}} {% endblock %}
+
 {% block content %}
 
 {% include 'partial/header.html' %}
 
-{% if not request.user.custom_profile %}
+{% if not author.custom_profile %}
 <div class="bg-gray-100">
     <div class="container mx-auto py-8">
         <div class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
             <div class="col-span-4 sm:col-span-3">
                 <div class="bg-white shadow rounded-lg p-6">
                     <div class="flex flex-col items-center">
-                        <img src="{% if request.user.avatar %}{{request.user.avatar_url}}{% else %}{% static 'assets/images/user.png' %}{% endif %}" class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
+                        <img alt="{{author.nickname}} avatar" src="{% if author.avatar %}{{author.avatar_url}}{% else %}{% static 'assets/images/user.png' %}{% endif %}" class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
 
                         </img>
-                        <h1 class="text-xl font-bold">{{request.user.fullname}}</h1>
-                        {% if request.user.title %}
-                        <p class="text-gray-700">{{request.user.title}}</p>
+                        <h1 class="text-xl font-bold">{{author.fullname}}</h1>
+                        {% if author.title %}
+                        <p class="text-gray-700">{{author.title}}</p>
                         {% endif %}
                         <div class="flex justify-center items-center gap-6 my-6">
-                        {% if request.user.linkedin %}
-                        <a class="text-gray-700 hover:text-orange-600" aria-label="Visit TrendyMinds LinkedIn" href="{{request.user.linkedin}}"
+                        {% if author.linkedin %}
+                        <a class="text-gray-700 hover:text-orange-600" aria-label="Visit TrendyMinds LinkedIn" href="{{author.linkedin}}"
                             target="_blank">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-6">
                                 <path fill="currentColor"
@@ -31,8 +33,8 @@
                             </svg>
                         </a>
                         {% endif %}
-                        {% if request.user.youtube %}
-                        <a class="text-gray-700 hover:text-orange-600" aria-label="Visit TrendyMinds YouTube" href="{{request.user.youtube}}"
+                        {% if author.youtube %}
+                        <a class="text-gray-700 hover:text-orange-600" aria-label="Visit TrendyMinds YouTube" href="{{author.youtube}}"
                             target="_blank">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="h-6">
                                 <path fill="currentColor"
@@ -41,8 +43,8 @@
                             </svg>
                         </a>
                         {% endif %}
-                        {% if request.user.facebook %}
-                        <a class="text-gray-700 hover:text-orange-600" aria-label="Visit TrendyMinds Facebook" href="{{request.user.facebook}}"
+                        {% if author.facebook %}
+                        <a class="text-gray-700 hover:text-orange-600" aria-label="Visit TrendyMinds Facebook" href="{{author.facebook}}"
                             target="_blank">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="h-6">
                                 <path fill="currentColor"
@@ -51,8 +53,8 @@
                             </svg>
                         </a>
                         {% endif %}
-                        {% if request.user.instagram %}
-                        <a class="text-gray-700 hover:text-orange-600" aria-label="Visit TrendyMinds Instagram" href="{{request.user.instagram}}"
+                        {% if author.instagram %}
+                        <a class="text-gray-700 hover:text-orange-600" aria-label="Visit TrendyMinds Instagram" href="{{author.instagram}}"
                             target="_blank">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-6">
                                 <path fill="currentColor"
@@ -61,8 +63,8 @@
                             </svg>
                         </a>
                         {% endif %}
-                        {% if request.user.x %}
-                        <a class="text-gray-700 hover:text-orange-600" aria-label="Visit TrendyMinds Twitter" href="{{request.user.x}}"
+                        {% if author.x %}
+                        <a class="text-gray-700 hover:text-orange-600" aria-label="Visit TrendyMinds Twitter" href="{{author.x}}"
                             target="_blank">
                             <svg class="h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                 <path fill="currentColor"
@@ -77,9 +79,9 @@
                     <div class="flex flex-col">
                         <span class="text-gray-700 uppercase font-bold tracking-wider mb-2">Info</span>
                         <ul>
-                            <li class="mb-2">Email: {{request.user.email}}</li>
-                            {% if request.user.website %}
-                            <li class="mb-2">Website: <a href="{{request.user.website}}" class="text-blue-700" target="_blank">{{request.user.website_name}}</a></li>
+                            <li class="mb-2">Email: {{author.email}}</li>
+                            {% if author.website %}
+                            <li class="mb-2">Website: <a href="{{author.website}}" class="text-blue-700" target="_blank">{{author.website_name}}</a></li>
                             {% endif %}
                             <!-- <li class="mb-2">React</li>
                             <li class="mb-2">Node.js</li>
@@ -90,7 +92,7 @@
                 </div>
             </div>
             <div class="col-span-4 sm:col-span-9">
-                {% if not request.user.bio %}
+                {% if not author.bio %}
                 <div class="bg-white shadow rounded-lg p-6">
                     <h2 class="text-xl font-bold mb-4">About Me</h2>
                     <p class="text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est
@@ -192,7 +194,7 @@
                     </div>
                 </div>
                 {% else %}
-                {{request.user.bio|safe}}
+                {{author.bio|safe}}
                 {% endif %}
             </div>
         </div>
@@ -200,7 +202,7 @@
 </div>
 {% else %}
 <div>
-    {{request.user.custom_profile|safe}}
+    {{author.custom_profile|safe}}
 </div>
 {% endif %}
 
@@ -208,7 +210,7 @@
   <div class="px-4 mx-auto max-w-screen-xl">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-2xl font-semibold tracking-tight">Recent Feed</h2>
-        <!-- <a href="/{{dashboard_route}}/core/feed/?type__exact=feed&q=" class="text-sm text-blue-600 hover:underline">View all</a> -->
+        <a href="{% url 'author_feed_view' author.nickname %}" class="text-sm text-blue-600 hover:underline">View all</a>
       </div>
       <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
           {% for feed in feeds %}
@@ -232,7 +234,7 @@
   <div class="px-4 mx-auto max-w-screen-xl">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-2xl font-semibold tracking-tight">Recent Post</h2>
-        <!-- <a href="/{{dashboard_route}}/core/feed/?type__exact=academic&q=" class="text-sm text-blue-600 hover:underline">View all</a> -->
+        <a href="{% url 'author_post_view' author.nickname %}" class="text-sm text-blue-600 hover:underline">View all</a>
       </div>
       <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
           {% for feed in posts %}

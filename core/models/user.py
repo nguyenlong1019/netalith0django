@@ -5,6 +5,8 @@ from utils.models import TimeInfo
 from django.utils import timezone 
 from datetime import timedelta 
 from tinymce.models  import HTMLField
+import os 
+from django.dispatch import receiver 
 
 
 class UserManager(BaseUserManager):
@@ -100,3 +102,31 @@ class User(AbstractBaseUser, PermissionsMixin, TimeInfo):
         if self.avatar:
             return self.avatar.url 
         return ""
+
+
+@receiver(models.signals.pre_save, sender=User)
+def auto_delete_file_on_change(sender, instance, **kwargs):
+    if not instance.pk:
+        return False 
+    
+    try:
+        old_file = User.objects.get(pk=instance.pk).avatar 
+    except User.DoesNotExist:
+        return False 
+    new_file = instance.avatar 
+    try:
+        if old_file and old_file.name != new_file.name:
+            if os.path.isfile(old_file.path):
+                os.remove(old_file.path)
+    except Exception as e:
+        print(f'Exception delete user avatar on change user avatar: {str(e)}')
+
+
+@receiver(models.signals.post_delete, sender=User)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    if instance.avatar:
+        if os.path.isfile(instance.avatar.path):
+            try:
+                os.remove(instance.avatar.path)
+            except Exception as e:
+                print(f'Exception delete user avatar on delete user avatar: {str(e)}')

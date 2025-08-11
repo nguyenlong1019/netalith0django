@@ -232,20 +232,19 @@
       <div class="space-y-4 max-h-[calc(100vh-5rem)] overflow-y-auto">
 
         <!-- Quick create -->
-        <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm space-y-3">
+        <!-- <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm space-y-3">
           <h3 class="font-semibold">Quick create</h3>
           <a href="create.html#post" class="block text-center w-full border border-gray-100 rounded-lg py-2 hover:bg-gray-50">Write a Post</a>
           <a href="create.html#blog" class="block text-center w-full border border-gray-100 rounded-lg py-2 hover:bg-gray-50">Write a Blog</a>
-        </div>
+        </div> -->
     
         <!-- Tags -->
         <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
           <h3 class="font-semibold mb-3">Tags</h3>
           <ul class="space-y-2 text-sm">
-            <li><a href="#" class="hover:underline">#javascript</a></li>
-            <li><a href="#" class="hover:underline">#ai</a></li>
-            <li><a href="#" class="hover:underline">#tailwindcss</a></li>
-            <li><a href="#" class="hover:underline">#gamedev</a></li>
+            {% for tag in top_tags %}
+            <li><a href="{% url 'feed_by_tag_view' tag.hash_name %}" class="hover:underline">{{tag.hash_name}}</a></li>
+            {% endfor %}
           </ul>
         </div>
     
@@ -253,9 +252,9 @@
         <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
           <h3 class="font-semibold mb-3">Top authors</h3>
           <ul class="space-y-2 text-sm">
-            <li><a href="#" class="hover:underline">@alice</a></li>
-            <li><a href="#" class="hover:underline">@bob</a></li>
-            <li><a href="#" class="hover:underline">@charlie</a></li>
+            {% for author in top_authors %}
+            <li><a href="{% url 'author_profile_view' author.nickname %}" class="hover:underline">@{{author.nickname}}</a></li>
+            {% endfor %}
           </ul>
         </div>
 

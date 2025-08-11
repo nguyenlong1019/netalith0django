@@ -17,6 +17,7 @@ from urllib.parse import urlencode
 from django.template.loader import render_to_string 
 from utils.utils import is_valid_email 
 from decouple import config 
+from core.models.feed import Feed 
 
 
 ACCESS_COOKIE = "access_token"
@@ -139,7 +140,12 @@ def my_profile_view(request):
     #         content_type = 'text/html'
     #     resp = FileResponse(fileobj, content_type=content_type)
     #     return render(request, request.user.profile_file, status=200)
-    return render(request, 'core/my-profile.html', status=200)
+    feeds = Feed.objects.filter(type='feed', author=request.user).order_by('-created_at')
+    posts = Feed.objects.filter(type='academic', author=request.user).order_by('-created_at')
+    context = {}
+    context['feeds'] = feeds[:4]
+    context['posts'] = posts[:4] 
+    return render(request, 'core/my-profile.html', context, status=200)
 
 
 from django.views.decorators.http import require_POST 

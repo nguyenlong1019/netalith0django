@@ -22,6 +22,17 @@ urlpatterns = [
         path('<category_slug>', post_category_view, name='post_category_view'),
         path('<category_slug>/<title_slug>', post_detail_view, name='post_detail_view'),
     ])),
+    path('author/', include([
+        path('<nickname>', author_profile_view, name='author_profile_view'),
+        path('<nickname>/feed', author_feed_view, name='author_feed_view'),
+        path('<nickname>/post', author_post_view, name='author_post_view'),
+    ])),
+    path('tag', include([
+        path('<hash_name>', feed_by_tag_view, name='feed_by_tag_view'),
+    ])),
+    path('game/', include([
+        path('<game_slug>', game_view, name='game_view'),
+    ])),
 ]
 
 urlpatterns += [

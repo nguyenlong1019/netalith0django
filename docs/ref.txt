@@ -7,14 +7,18 @@ Use in:
 https://flowbite.com/blocks/
 
 feat: 
-auth (done) - bổ sung 1 task schedule 1 ngày quét và xóa các acc k verify - trừ acc superadmin, profile (done) - bổ sung thêm recent post and blog, 
-blog, post, AI assistant (done), JS game
 
-blog, post, -> show, admin statistic -> 
+blog, post detail view: comment, related, author, 
+JS game: 
+
+feed: react (like)
+SEO, robots.txt, sitemap.xml, schema LD JSON, thumb banner, 
+responsive, check all
+test case
+quick create post, feed 
+tag by post, feed, author detail link 
 
 tool -> source code -> paste -> save
-
-user -> auto delete avatar on change avatar or on delete 
 
 -> quay một video demo để up lên youtube, facebook, fanpage -> có description bằng tiếng Anh 
 short demo up lên tiktok 

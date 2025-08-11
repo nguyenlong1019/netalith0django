@@ -9,6 +9,8 @@ from tinymce.models import HTMLField
 from .category import Category, Tag 
 from .user import User 
 import time 
+import os 
+from django.dispatch import receiver 
 
 
 PUBLISH_STATUS = (
@@ -33,6 +35,7 @@ class Feed(TimeInfo, SEOBasicAbstract):
     banner = models.FileField(upload_to='feed/', null=True, blank=True, validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp', 'avif'])])
     pid = models.CharField(max_length=32, unique=True, default=gen_hex)
     short_description = models.CharField(max_length=255, null=True, blank=True)
+    time_reader = models.SmallIntegerField(default=5)
 
     class Meta:
         verbose_name_plural = 'Feed'
@@ -56,6 +59,13 @@ class Feed(TimeInfo, SEOBasicAbstract):
 
     def __str__(self):
         return self.pid 
+    
+
+    @property
+    def banner_url(self):
+        if self.banner:
+            return self.banner.url 
+        return ''
     
 
     @property
@@ -93,3 +103,31 @@ class FeedComment(TimeInfo):
 
     def __str__(self):
         return f"{self.id}"
+
+
+@receiver(models.signals.pre_save, sender=Feed)
+def auto_delete_file_on_change(sender, instance, **kwargs):
+    if not instance.pk:
+        return False 
+    
+    try:
+        old_file = Feed.objects.get(pk=instance.pk).banner 
+    except Feed.DoesNotExist:
+        return False 
+    new_file = instance.banner 
+    try:
+        if old_file and old_file.name != new_file.name:
+            if os.path.isfile(old_file.path):
+                os.remove(old_file.path)
+    except Exception as e:
+        print(f'Exception delete Feed banner on change Feed banner: {str(e)}')
+
+
+@receiver(models.signals.post_delete, sender=Feed)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    if instance.banner:
+        if os.path.isfile(instance.banner.path):
+            try:
+                os.remove(instance.banner.path)
+            except Exception as e:
+                print(f'Exception delete Feed banner on delete Feed banner: {str(e)}')

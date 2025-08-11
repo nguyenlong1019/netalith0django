@@ -6,7 +6,9 @@ class CoreConfig(AppConfig):
     name = 'core'
 
 
-    # def ready(self):
+    def ready(self):
+        from tasks import updater 
+        updater.start()
     #     super().ready()
     #     from django.db.models.signals import post_migrate 
     #     from django.contrib.auth.models import Group 
