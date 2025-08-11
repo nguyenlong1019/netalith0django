@@ -2,8 +2,32 @@
 
 {% block content %}
 
+{% include 'partial/header.html' %}
+
+<!-- White–Blue Glass Card -->
+<div class="mx-auto max-w-5xl px-4 sm:px-6 mt-6">
+    <div class="rounded-3xl bg-white/80 backdrop-blur border border-sky-100 shadow-[0_8px_30px_rgba(2,132,199,0.08)]">
+      <div class="h-1 rounded-t-3xl bg-gradient-to-r from-sky-400 to-indigo-400"></div>
+      <div class="p-6 sm:p-8">
+        <h1 class="text-3xl font-bold text-blue-700">{{game.name}}</h1>
+        <p class="mt-2 text-sm flex flex-wrap items-center gap-x-3 gap-y-1">
+          <time datetime="2025-08-11" class="text-sky-700">{{game.created_at}}</time>
+          <span class="text-sky-300">•</span>
+          <span class="text-slate-600">
+            Author:
+            <a href="{% if author.nickname %}{% url 'author_profile_view' game.author.nickname %}{% else %}{% url 'author_profile_view' game.author.email %}{% endif %}" class="text-sky-700 hover:text-sky-900 underline decoration-sky-300">{{game.author}}</a>
+          </span>
+        </p>
+      </div>
+    </div>
+</div>
+  
+  
+
 {% if game.css %}{{game.css|safe}}{% endif %}
 {% if game.html %}{{game.html|safe}}{% endif %}
 {% if game.javascript %}{{game.javascript|safe}}{% endif %}
+
+{% include 'partial/footer.html' %}
 
 {% endblock %}

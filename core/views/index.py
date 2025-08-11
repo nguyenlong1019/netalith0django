@@ -15,38 +15,9 @@ def index_view(request):
         total_rank_db=F('total_comment') + F('total_view') + F('total_react')
     ).order_by('-created_at').order_by('-total_rank_db')
 
-    top_authors_by_feed_interactions = (
-        User.objects
-            .annotate(
-                interactions=Sum(
-                    F('feed__total_view') + F('feed__total_react') + F('feed__total_comment'),
-                    filter=Q(feed__status=1)
-                )
-            )
-            .order_by('-interactions')[:5]
-    )
-
-    top_tags_by_feed_interactions = (
-        Tag.objects
-            .annotate(
-                feed_interactions=Sum(
-                    F('feed__total_view') + F('feed__total_react') + F('feed__total_comment'),
-                    filter=Q(feed__status=1)
-                )
-            )
-            .order_by('-feed_interactions')[:10]
-    )
-
-    game_hot = Game.objects.filter(status=1).annotate(
-        total_rank_db=F('view_count') + F('play_count')
-    ).order_by('-created_at').order_by('-total_rank_db')
-
     context = {}
     context['latest'] = latest[:10]
     context['top'] = top[:10]
-    context['top_authors'] = top_authors_by_feed_interactions
-    context['top_tags'] = top_tags_by_feed_interactions
-    context['game_hot'] = game_hot 
     return render(request, 'core/index.html', context, status=200)
 
 

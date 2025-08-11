@@ -41,3 +41,10 @@ class Game(TimeInfo):
         if not self.slug:
             self.slug = slugify(self.name)
         super(Game, self).save(*args, **kwargs)
+
+
+    def logo_url(self):
+        if self.logo:
+            return self.logo.url 
+        return ''
+

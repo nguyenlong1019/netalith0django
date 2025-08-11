@@ -13,49 +13,7 @@
     <div class="sticky top-20">
       <div class="space-y-4 max-h-[calc(100vh-5rem)] overflow-y-auto">
 
-        <!-- AI Assistant -->
-        <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-          <h3 class="font-semibold mb-3">Try AI assistant</h3>
-          <div class="text-sm text-gray-600 mb-2">Ask AI about code, games, or posts…</div>
-          <div class="flex gap-2 justify-center">
-            <a href="{% url 'ai_assistant_view' %}"
-              class="flex-shrink-0 px-3 py-2 rounded-lg bg-blue-600 text-white text-sm"
-            >
-              Try Now
-            </a>
-          </div>
-        </div>
-    
-        <!-- Build Game -->
-        <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-          <h3 class="font-semibold mb-3">Build a game</h3>
-          <p class="text-sm text-gray-600 mb-3">
-            Upload a ZIP (index.html + assets) to host an HTML5 game.
-          </p>
-          <div class="flex gap-2">
-            <a href="#" class="flex-1 text-center border border-gray-100 rounded-lg py-2 hover:bg-gray-50">Upload ZIP</a>
-            <a href="#" class="flex-1 text-center border border-gray-100 rounded-lg py-2 hover:bg-gray-50">Create script</a>
-          </div>
-        </div>
-    
-        <!-- Trending Games -->
-        <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-          <h3 class="font-semibold mb-3">Trending games</h3>
-          <ul class="space-y-3 text-sm">
-            <li class="flex items-center gap-3">
-              <img src="https://picsum.photos/seed/1/48/48" class="rounded-md" alt="Space Runner cover">
-              <a href="#" class="hover:underline">Space Runner</a>
-            </li>
-            <li class="flex items-center gap-3">
-              <img src="https://picsum.photos/seed/2/48/48" class="rounded-md" alt="Tower Defense cover">
-              <a href="#" class="hover:underline">Tower Defense</a>
-            </li>
-            <li class="flex items-center gap-3">
-              <img src="https://picsum.photos/seed/3/48/48" class="rounded-md" alt="2048 Plus cover">
-              <a href="#" class="hover:underline">2048 Plus</a>
-            </li>
-          </ul>
-        </div>
+        {% include 'partial/index-left.html' %}
 
       </div>
     </div>
@@ -219,33 +177,7 @@
     <div class="sticky top-20">
       <div class="space-y-4 max-h-[calc(100vh-5rem)] overflow-y-auto">
 
-        <!-- Quick create -->
-        <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm space-y-3">
-          <h3 class="font-semibold">Quick create</h3>
-          <a href="create.html#post" class="block text-center w-full border border-gray-100 rounded-lg py-2 hover:bg-gray-50">Write a Post</a>
-          <a href="create.html#blog" class="block text-center w-full border border-gray-100 rounded-lg py-2 hover:bg-gray-50">Write a Blog</a>
-        </div>
-    
-        <!-- Tags -->
-        <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-          <h3 class="font-semibold mb-3">Tags</h3>
-          <ul class="space-y-2 text-sm">
-            <li><a href="#" class="hover:underline">#javascript</a></li>
-            <li><a href="#" class="hover:underline">#ai</a></li>
-            <li><a href="#" class="hover:underline">#tailwindcss</a></li>
-            <li><a href="#" class="hover:underline">#gamedev</a></li>
-          </ul>
-        </div>
-    
-        <!-- Top authors -->
-        <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-          <h3 class="font-semibold mb-3">Top authors</h3>
-          <ul class="space-y-2 text-sm">
-            <li><a href="#" class="hover:underline">@alice</a></li>
-            <li><a href="#" class="hover:underline">@bob</a></li>
-            <li><a href="#" class="hover:underline">@charlie</a></li>
-          </ul>
-        </div>
+        {% include 'partial/index-right.html' %}
 
       </div>
     </div>

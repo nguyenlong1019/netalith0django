@@ -436,9 +436,35 @@ class AssistantLogAdmin(admin.ModelAdmin):
 
 
 @admin.register(Game)
-class GameAdmin(admin.ModelAdmin):
+class GameAdmin(BaseAdmin0Django, BaseAdminContent):
     search_fields = ['id', 'name', 'author']
     list_display = ['id', 'name', 'author', 'updated_at_display',]
     list_filter = ['created_at', 'updated_at', 'author']
     list_display_links = ['id']
     readonly_fields = ['id', 'created_at', 'updated_at'] 
+
+
+    fieldsets = (
+        ('Game', {
+            'fields': (
+                'id', 'name', 'status', 'html', 'css', 'javascript', 'logo', 'banner', 'slug',
+            )
+        }),
+        ("Statistic", {"fields": ('view_count', "play_count",)}),
+        ("Dates", {"fields": ("created_at", "updated_at")}),
+        ("Owner", {"fields": ("author",)}),
+    )
+
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if self._is_user0(request):
+            return qs.filter(author=request.user)
+        return qs 
+    
+
+    def get_readonly_fields(self, request, obj=None):
+        ro = list(super().get_readonly_fields(request, obj))
+        if self._is_user0(request):
+            ro += ['view_count', 'play_count',]
+        return ro

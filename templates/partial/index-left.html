@@ -1,0 +1,36 @@
+<!-- AI Assistant -->
+<div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+    <h3 class="font-semibold mb-3">Try AI assistant</h3>
+    <div class="text-sm text-gray-600 mb-2">Ask AI about code, games, or posts…</div>
+    <div class="flex gap-2 justify-center">
+      <a href="{% url 'ai_assistant_view' %}"
+        class="flex-shrink-0 px-3 py-2 rounded-lg bg-blue-600 text-white text-sm"
+      >
+        Try Now
+      </a>
+    </div>
+  </div>
+
+  <!-- Build Game -->
+  <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+    <h3 class="font-semibold mb-3">Build a game</h3>
+    <p class="text-sm text-gray-600 mb-3">
+      Upload HTML, CSS, JavaScript to host an JavaScript game.
+    </p>
+    <div class="flex gap-2">
+      <a href="#" class="flex-1 text-center border border-gray-100 rounded-lg py-2 hover:bg-gray-50">Guide</a>
+    </div>
+  </div>
+
+  <!-- Trending Games -->
+  <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+    <h3 class="font-semibold mb-3">Trending games</h3>
+    <ul class="space-y-3 text-sm">
+      {% for game in game_hot %}
+      <li class="flex items-center gap-3">
+        <img src="{% if game.logo_url %}{{game.logo_url}}{% else %}{{random_logo_games|random}}{% endif %}" class="rounded-md" alt="{{game.name}}">
+        <a href="{% url 'game_view' game.slug %}" class="hover:underline">{{game.name|truncatechars:25}}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
