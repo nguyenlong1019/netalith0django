@@ -10,7 +10,16 @@ from django.http import Http404, HttpResponseBadRequest
 
 
 def index_view(request):
-    latest = Feed.objects.filter(status=1).order_by('-created_at')
+    # latest = Feed.objects.filter(status=1).order_by('-created_at')
+    latest = (
+        Feed.objects.filter(status=1)
+        .annotate(
+            like_count=Count('reactions', filter=Q(reactions__type=1)),
+            heart_count=Count('reactions', filter=Q(reactions__type=2)),
+        )
+        .select_related('author', 'category')
+        .prefetch_related('tags')
+    )
     top = Feed.objects.filter(status=1).annotate(
         total_rank_db=F('total_comment') + F('total_view') + F('total_react')
     ).order_by('-created_at').order_by('-total_rank_db')

@@ -64,14 +64,28 @@
               {{feed.short_description}}
             </p>
             {% endif %}
+            {# Buttons #}
+            <div class="mt-4 flex items-center gap-3 text-sm">
+              <button
+                class="react-btn px-3 py-1 rounded-lg border hover:bg-gray-50"
+                data-id="{{ feed.id }}" data-type="1" aria-label="Like"
+              >👍 <span class="like-count">{{ feed.like_count }}</span></button>
+
+              <button
+                class="react-btn px-3 py-1 rounded-lg border hover:bg-gray-50"
+                data-id="{{ feed.id }}" data-type="2" aria-label="Heart"
+              >❤️ <span class="heart-count">{{ feed.heart_count }}</span></button>
+
+              <span class="text-gray-500">Total: <span class="total-react">{{ feed.total_react }}</span></span>
+            </div>
             <div class="mt-3 flex items-center justify-between text-sm text-gray-600">
               <div class="flex items-center gap-4">
-                <span>💬 12</span><span>👍 45</span>
+                <!-- <span>💬 12</span><span>👍 45</span> -->
                 {% for tag in feed.tags.all %}
                   <span>{{tag.hash_name}}</span>
                 {% endfor %}
               </div>
-              <a href="post-detail.html" class="text-blue-600 hover:underline">View discussion →</a>
+              <a href="{% url 'feed_detail_view' feed.category.slug feed.slug %}" class="text-blue-600 hover:underline">View discussion →</a>
             </div>
           </article>
         {% else %}
@@ -86,14 +100,28 @@
               {{feed.short_description}}
             </p>
             {% endif %}
+            {# Buttons #}
+            <div class="mt-4 flex items-center gap-3 text-sm">
+              <button
+                class="react-btn px-3 py-1 rounded-lg border hover:bg-gray-50"
+                data-id="{{ feed.id }}" data-type="1" aria-label="Like"
+              >👍 <span class="like-count">{{ feed.like_count }}</span></button>
+
+              <button
+                class="react-btn px-3 py-1 rounded-lg border hover:bg-gray-50"
+                data-id="{{ feed.id }}" data-type="2" aria-label="Heart"
+              >❤️ <span class="heart-count">{{ feed.heart_count }}</span></button>
+
+              <span class="text-gray-500">Total: <span class="total-react">{{ feed.total_react }}</span></span>
+            </div>
             <div class="mt-3 flex items-center justify-between text-sm text-gray-600">
               <div class="flex items-center gap-4">
-                <span>👍 120</span>
+                <!-- <span>👍 120</span> -->
                 {% for tag in feed.tags.all %}
                   <span>{{tag.hash_name}}</span>
                 {% endfor %}
               </div>
-              <a href="blog-detail.html" class="text-blue-600 hover:underline">Read post →</a>
+              <a href="{% url 'post_detail_view' feed.category.slug feed.slug %}" class="text-blue-600 hover:underline">Read post →</a>
             </div>
           </article>
         {% endif %}
@@ -117,12 +145,12 @@
             {% endif %}
             <div class="mt-3 flex items-center justify-between text-sm text-gray-600">
               <div class="flex items-center gap-4">
-                <span>💬 12</span><span>👍 45</span>
+                <!-- <span>💬 12</span><span>👍 45</span> -->
                 {% for tag in feed.tags.all %}
                   <span>{{tag.hash_name}}</span>
                 {% endfor %}
               </div>
-              <a href="post-detail.html" class="text-blue-600 hover:underline">View discussion →</a>
+              <a href="{% url 'feed_detail_view' feed.category.slug feed.slug %}" class="text-blue-600 hover:underline">View discussion →</a>
             </div>
           </article>
         {% else %}
@@ -139,12 +167,12 @@
             {% endif %}
             <div class="mt-3 flex items-center justify-between text-sm text-gray-600">
               <div class="flex items-center gap-4">
-                <span>👍 120</span>
+                <!-- <span>👍 120</span> -->
                 {% for tag in feed.tags.all %}
                   <span>{{tag.hash_name}}</span>
                 {% endfor %}
               </div>
-              <a href="blog-detail.html" class="text-blue-600 hover:underline">Read post →</a>
+              <a href="{% url 'post_detail_view' feed.category.slug feed.slug %}" class="text-blue-600 hover:underline">Read post →</a>
             </div>
           </article>
         {% endif %}
@@ -198,5 +226,101 @@
 </main>
 
 {% include 'partial/footer.html' %}
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+(function(){
+  function getCSRF() {
+    // nếu bạn render input csrftoken trong form thì có thể lấy từ đó
+    var el = document.querySelector('input[name=csrfmiddlewaretoken]');
+    return el ? el.value : '';
+  }
+
+  // REACT (like/heart)
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.react-btn');
+    if (!btn) return;
+
+    var feedId = btn.getAttribute('data-id');
+    var type = btn.getAttribute('data-type');
+    var formData = new FormData();
+    formData.append('type', type);
+    formData.append('csrfmiddlewaretoken', getCSRF());
+
+    btn.disabled = true;
+
+    fetch('/api/feeds/' + feedId + '/react/', {
+      method: 'POST',
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      body: formData
+    })
+    .then(function(res){
+      if (!res.ok) throw new Error('Network');
+      return res.json();
+    })
+    .then(function(data){
+      // cập nhật counters gần nhất trong card
+      var card = btn.closest('article, .feed-card, body');
+      if (card) {
+        var totalEl = card.querySelector('.total-react');
+        if (totalEl) totalEl.textContent = data.total_react;
+
+        var likeEl  = card.querySelector('.like-count');
+        var heartEl = card.querySelector('.heart-count');
+        if (likeEl)  likeEl.textContent  = data.like_count;
+        if (heartEl) heartEl.textContent = data.heart_count;
+      }
+    })
+    .catch(console.error)
+    .finally(function(){ btn.disabled = false; });
+  });
+
+  // COMMENT submit
+  document.addEventListener('submit', function(e){
+    var form = e.target.closest('.comment-form');
+    if (!form) return;
+    e.preventDefault();
+
+    var feedId = form.getAttribute('data-id');
+    var fd = new FormData(form);
+
+    fetch('/api/feeds/' + feedId + '/comment/', {
+      method: 'POST',
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      body: fd
+    })
+    .then(function(res){
+      if (!res.ok) throw new Error('Bad request');
+      return res.json();
+    })
+    .then(function(data){
+      if (!data.ok) return;
+
+      // chèn comment mới
+      var ul = document.getElementById('comment-list-' + feedId);
+      if (ul) {
+        var li = document.createElement('li');
+        li.className = 'bg-white border rounded-xl p-4';
+        li.innerHTML =
+          '<div class="text-sm text-gray-500">' + data.user + ' • just now</div>' +
+          '<div class="prose mt-1">' + data.content + '</div>';
+        ul.prepend(li);
+      }
+
+      // reset form
+      form.reset();
+
+      // tăng counter tổng nếu bạn hiển thị
+      var card = form.closest('article, .feed-card, body');
+      var ctn = card && card.querySelector('.total-comment');
+      if (ctn) ctn.textContent = (parseInt(ctn.textContent || '0', 10) + 1);
+    })
+    .catch(console.error);
+  });
+})();
+</script>
 
 {% endblock %}

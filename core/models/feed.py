@@ -11,6 +11,7 @@ from .user import User
 import time 
 import os 
 from django.dispatch import receiver 
+from django.db.models import UniqueConstraint, Index
 
 
 PUBLISH_STATUS = (
@@ -131,3 +132,30 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
                 os.remove(instance.banner.path)
             except Exception as e:
                 print(f'Exception delete Feed banner on delete Feed banner: {str(e)}')
+
+
+REACTION_CHOICES = (
+    (1, "like"),
+    (2, "heart"),
+)
+
+class FeedReaction(TimeInfo):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="feed_reactions")
+    feed = models.ForeignKey(Feed, on_delete=models.CASCADE, related_name="reactions")
+    type = models.PositiveSmallIntegerField(choices=REACTION_CHOICES)
+
+
+    class Meta:
+        db_table = "feed_reaction"
+        constraints = [
+            # Mỗi user chỉ có 1 reaction trên 1 feed (có thể đổi type)
+            UniqueConstraint(fields=["user", "feed"], name="uniq_user_feed_reaction"),
+        ]
+        indexes = [
+            Index(fields=["feed", "type"]),
+            Index(fields=["user"]),
+        ]
+
+
+    def __str__(self):
+        return f"{self.user_id}-{self.feed_id}-{self.get_type_display()}"

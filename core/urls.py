@@ -39,5 +39,7 @@ urlpatterns += [
     path('api/v1/', include([
         path('auth/refresh', refresh_token_view, name='refresh_token_view'),
         path('ai/ask', ai_ask_api, name='ai_ask_api'),
-    ]))
+    ])),
+    path("api/feeds/<int:feed_id>/react/", react_feed, name="feed_react"),
+    path("api/feeds/<int:feed_id>/comment/", comment_feed, name="feed_comment"),
 ]
