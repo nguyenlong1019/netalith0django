@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if game.css %}{{game.css|safe}}{% endif %}
+{% if game.html %}{{game.html|safe}}{% endif %}
+{% if game.javascript %}{{game.javascript|safe}}{% endif %}
+
+{% endblock %}

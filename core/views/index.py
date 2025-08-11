@@ -5,6 +5,7 @@ from core.models.assistant import AssistantLog
 from core.models.feed import Feed 
 from core.models.category import Category, Tag 
 from core.models.user import User 
+from core.models.game import Game 
 from django.http import Http404, HttpResponseBadRequest
 
 
@@ -29,18 +30,23 @@ def index_view(request):
         Tag.objects
             .annotate(
                 feed_interactions=Sum(
-                    F('feeds__total_view') + F('feeds__total_react') + F('feeds__total_comment'),
-                    filter=Q(feeds__status=1)
+                    F('feed__total_view') + F('feed__total_react') + F('feed__total_comment'),
+                    filter=Q(feed__status=1)
                 )
             )
             .order_by('-feed_interactions')[:10]
     )
+
+    game_hot = Game.objects.filter(status=1).annotate(
+        total_rank_db=F('view_count') + F('play_count')
+    ).order_by('-created_at').order_by('-total_rank_db')
 
     context = {}
     context['latest'] = latest[:10]
     context['top'] = top[:10]
     context['top_authors'] = top_authors_by_feed_interactions
     context['top_tags'] = top_tags_by_feed_interactions
+    context['game_hot'] = game_hot 
     return render(request, 'core/index.html', context, status=200)
 
 
@@ -221,7 +227,15 @@ def feed_by_tag_view(request, hash_name = None):
 
 
 def game_view(request, game_slug = None):
-    pass 
+    if not game_slug:
+        return Http404('<h1>404 Not Found</h1>')
+    try:
+        game = Game.objects.get(slug=game_slug, status=1)
+    except Exception as e:
+        game = False 
+    context = {}
+    context['game'] = game 
+    return render(request, 'core/game.html', context, status=200)
 
 
 # http://127.0.0.1:8000/feed/tech-discuss/qa-how-to-embed-an-html5-game-in-0django

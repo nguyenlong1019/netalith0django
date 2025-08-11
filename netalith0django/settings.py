@@ -266,6 +266,7 @@ JAZZMIN_SETTINGS = {
         # "resource.ResourceDetail",
         "core", # custom core app 
         "core.User",
+        "core.Game",
         "core.Category",
         "core.Tag",
         "core.Feed", 
@@ -295,6 +296,7 @@ JAZZMIN_SETTINGS = {
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
         "core.User": "fas fa-user-circle",
+        "core.Game": "fas fa-gamepad",
         "core.Category": "fas fa-layer-group",
         "core.Tag": "fas fa-tags",
         "core.Feed": "fab fa-envira", 

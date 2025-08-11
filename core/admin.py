@@ -14,6 +14,7 @@ from core.models.feed import Feed, FeedComment
 from core.models.assistant import AssistantLog 
 from core.forms import CustomUserChangeForm, CustomUserCreationForm
 from django.core.exceptions import ValidationError
+from core.models.game import Game 
 
 
 @admin.register(ContentType)
@@ -430,5 +431,14 @@ class AssistantLogAdmin(admin.ModelAdmin):
     search_fields = ['id', 'cid', 'user']
     list_display = ['id', 'cid', 'updated_at_display',]
     list_filter = ['created_at', 'updated_at', 'user']
+    list_display_links = ['id']
+    readonly_fields = ['id', 'created_at', 'updated_at'] 
+
+
+@admin.register(Game)
+class GameAdmin(admin.ModelAdmin):
+    search_fields = ['id', 'name', 'author']
+    list_display = ['id', 'name', 'author', 'updated_at_display',]
+    list_filter = ['created_at', 'updated_at', 'author']
     list_display_links = ['id']
     readonly_fields = ['id', 'created_at', 'updated_at'] 
